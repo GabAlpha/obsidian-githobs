@@ -11,16 +11,20 @@ import {
 
 // Remember to rename these classes and interfaces!
 
-interface MyPluginSettings {
-	mySetting: string;
+interface GitHubIssueEditorSettings {
+	token: string;
+	owner: string;
+	repo: string;
 }
 
-const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
+const DEFAULT_SETTINGS: GitHubIssueEditorSettings = {
+	token: '',
+	owner: '',
+	repo: ''
 };
 
 export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
+	settings: GitHubIssueEditorSettings;
 
 	async onload() {
 		await this.loadSettings();
@@ -130,14 +134,40 @@ class SampleSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc("It's a secret")
+			.setName('Github token')
+			.setDesc('Add the github token')
 			.addText((text) =>
 				text
 					.setPlaceholder('Enter your secret')
-					.setValue(this.plugin.settings.mySetting)
+					.setValue(this.plugin.settings.token)
 					.onChange(async (value) => {
-						this.plugin.settings.mySetting = value;
+						this.plugin.settings.token = value;
+						await this.plugin.saveSettings();
+					})
+			);
+
+		new Setting(containerEl)
+			.setName('Owner repo')
+			.setDesc('The owner of the repo')
+			.addText((text) =>
+				text
+					.setPlaceholder('Enter your secret')
+					.setValue(this.plugin.settings.owner)
+					.onChange(async (value) => {
+						this.plugin.settings.owner = value;
+						await this.plugin.saveSettings();
+					})
+			);
+
+		new Setting(containerEl)
+			.setName('Repo name')
+			.setDesc('The repo name')
+			.addText((text) =>
+				text
+					.setPlaceholder('Enter your secret')
+					.setValue(this.plugin.settings.repo)
+					.onChange(async (value) => {
+						this.plugin.settings.repo = value;
 						await this.plugin.saveSettings();
 					})
 			);
