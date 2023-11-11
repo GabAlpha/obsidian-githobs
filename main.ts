@@ -1,4 +1,13 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import {
+	App,
+	Editor,
+	MarkdownView,
+	Modal,
+	Notice,
+	Plugin,
+	PluginSettingTab,
+	Setting
+} from 'obsidian';
 
 // Remember to rename these classes and interfaces!
 
@@ -8,7 +17,7 @@ interface MyPluginSettings {
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
 	mySetting: 'default'
-}
+};
 
 export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
@@ -78,9 +87,7 @@ export default class MyPlugin extends Plugin {
 		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
 	}
 
-	onunload() {
-
-	}
+	onunload() {}
 
 	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
@@ -97,12 +104,12 @@ class SampleModal extends Modal {
 	}
 
 	onOpen() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.setText('Woah!');
 	}
 
 	onClose() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.empty();
 	}
 }
@@ -116,19 +123,21 @@ class SampleSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		const {containerEl} = this;
+		const { containerEl } = this;
 
 		containerEl.empty();
 
 		new Setting(containerEl)
 			.setName('Setting #1')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.mySetting)
-				.onChange(async (value) => {
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
+			.setDesc("It's a secret")
+			.addText((text) =>
+				text
+					.setPlaceholder('Enter your secret')
+					.setValue(this.plugin.settings.mySetting)
+					.onChange(async (value) => {
+						this.plugin.settings.mySetting = value;
+						await this.plugin.saveSettings();
+					})
+			);
 	}
 }
