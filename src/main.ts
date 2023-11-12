@@ -10,6 +10,7 @@ import {
 	Setting,
 	requestUrl
 } from 'obsidian';
+import { readIssueId, removeProperties, writeIssueId } from 'utils';
 
 // Remember to rename these classes and interfaces!
 
@@ -49,6 +50,11 @@ export default class MyPlugin extends Plugin {
 
 				if (res.status === 201) {
 					new Notice('Issue successfully created');
+					const propertiesWithGithubIssue = writeIssueId(file.data!, res.json.number);
+					this.app.vault.modify(
+						file.file!,
+						`${propertiesWithGithubIssue}\n${removeProperties(file.data)}`
+					);
 				}
 			}
 		);
