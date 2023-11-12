@@ -40,12 +40,33 @@ export default class MyPlugin extends Plugin {
 			'Create a github issue',
 			async (evt: MouseEvent) => {
 				const file = this.app.workspace.activeEditor as MarkdownFileInfo & { data: string };
+				const issueId = readIssueId(file.data);
+
+				if (issueId) {
+					const res = await requestUrl({
+						url: `https://api.github.com/repos/${this.settings.owner}/${this.settings.repo}/issues/${issueId}`,
+						headers: { Authorization: `Bearer ${this.settings.token}` },
+						method: 'PATCH',
+						body: JSON.stringify({
+							title: file.file?.basename ?? '',
+							body: removeProperties(file.data)
+						})
+					});
+
+					if (res.status === 200) {
+						new Notice('Issue successfully updated!');
+					}
+					return;
+				}
 
 				const res = await requestUrl({
 					url: `https://api.github.com/repos/${this.settings.owner}/${this.settings.repo}/issues`,
 					headers: { Authorization: `Bearer ${this.settings.token}` },
 					method: 'POST',
-					body: JSON.stringify({ title: file.file?.basename ?? '', body: file.data })
+					body: JSON.stringify({
+						title: file.file?.basename ?? '',
+						body: removeProperties(file.data)
+					})
 				});
 
 				if (res.status === 201) {

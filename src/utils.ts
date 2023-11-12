@@ -27,7 +27,10 @@ function readProperties(data: string) {
 		return { properties: undefined, indexEndPropertiesLine: undefined };
 	}
 
-	return { properties: restOfLines.slice(0, indexEndPropertiesLine), indexEndPropertiesLine };
+	return {
+		properties: restOfLines.slice(0, indexEndPropertiesLine),
+		indexEndPropertiesLine: indexEndPropertiesLine + 1
+	};
 }
 
 export function removeProperties(data: string) {
@@ -35,7 +38,7 @@ export function removeProperties(data: string) {
 	if (!indexEndPropertiesLine) return data;
 
 	const dataSplitted = data.split('\n');
-	return dataSplitted.slice(indexEndPropertiesLine).join('\n');
+	return dataSplitted.slice(indexEndPropertiesLine + 1).join('\n');
 }
 
 export function readIssueId(data: string) {
