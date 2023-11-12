@@ -1,12 +1,14 @@
 import {
 	App,
 	Editor,
+	MarkdownFileInfo,
 	MarkdownView,
 	Modal,
 	Notice,
 	Plugin,
 	PluginSettingTab,
-	Setting
+	Setting,
+	requestUrl
 } from 'obsidian';
 
 // Remember to rename these classes and interfaces!
@@ -32,10 +34,24 @@ export default class MyPlugin extends Plugin {
 		const isOnMarkdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
 
 		// This creates an icon in the left ribbon.
-		const syncBtn = this.addRibbonIcon('upload', 'Create a github issue', (evt: MouseEvent) => {
-			// Called when the user clicks the icon.
-			new Notice('This is a notice!');
-		});
+		const syncBtn = this.addRibbonIcon(
+			'upload',
+			'Create a github issue',
+			async (evt: MouseEvent) => {
+				const file = this.app.workspace.activeEditor as MarkdownFileInfo & { data: string };
+
+				const res = await requestUrl({
+					url: `https://api.github.com/repos/${this.settings.owner}/${this.settings.repo}/issues`,
+					headers: { Authorization: `Bearer ${this.settings.token}` },
+					method: 'POST',
+					body: JSON.stringify({ title: file.file?.basename ?? '', body: file.data })
+				});
+
+				if (res.status === 201) {
+					new Notice('Issue successfully created');
+				}
+			}
+		);
 
 		syncBtn.style.display = isOnMarkdownView ? 'inherit' : 'none';
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
