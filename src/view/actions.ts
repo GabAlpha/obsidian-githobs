@@ -2,21 +2,21 @@ import { MarkdownFile } from 'types';
 import * as Api from '../api';
 import * as PropertiesHelper from '../helper/properties';
 import { GitHubIssueEditorSettings } from 'settings';
-import { RequestUrlResponse } from 'obsidian';
+import { RequestUrlResponse, TFile } from 'obsidian';
+import { GitHubIssueStatus } from 'view';
 
 async function updateFile(file: MarkdownFile, res: RequestUrlResponse, externalData?: string) {
 	const propertiesWithGithubIssue = PropertiesHelper.writeIssueId(
 		externalData ?? file.data,
 		res.json.number
 	);
-	const propertiesWithLastDate = PropertiesHelper.writeIssueLastData(
-		propertiesWithGithubIssue,
-		res.json.updated_at
-	);
 
 	await this.app.vault.modify(
 		file.file,
-		`${propertiesWithLastDate}\n${PropertiesHelper.removeProperties(externalData ?? file.data)}`
+		`${propertiesWithGithubIssue}\n${PropertiesHelper.removeProperties(
+			externalData ?? file.data
+		)}`,
+		{ mtime: new Date(res.json.updated_at).getTime() }
 	);
 }
 
@@ -47,9 +47,27 @@ export async function pushIssue(
 	}
 }
 
-export async function checkStatus(issueId: string, settings: GitHubIssueEditorSettings) {
+export async function fetchIssue(
+	issueId: string,
+	settings: GitHubIssueEditorSettings,
+	file: TFile
+) {
 	const res = await Api.getIssue(settings, issueId);
-	return res.json.updated_at;
+
+	const fileRead = this.app.vault.getFiles().find((f: TFile) => f.path === file.path);
+	const lastDate = fileRead.stat.mtime;
+
+	let status: GitHubIssueStatus | undefined = undefined;
+
+	if (lastDate && new Date(res.json.updated_at) > new Date(lastDate)) {
+		status = GitHubIssueStatus.CanPull;
+	}
+
+	if (lastDate && new Date(res.json.updated_at) < new Date(lastDate)) {
+		status = GitHubIssueStatus.CanPush;
+	}
+
+	return { date: res.json.updated_at, status };
 }
 
 export async function pullIssue(

@@ -2,13 +2,18 @@ import { ItemView, MarkdownView, WorkspaceLeaf, setIcon } from 'obsidian';
 import { GitHubIssueEditorSettings } from 'settings';
 import { MarkdownFile } from 'types';
 import * as PropertiesHelper from '../helper/properties';
-import { checkStatus, pullIssue, pushIssue } from 'view/actions';
+import { fetchIssue, pullIssue, pushIssue } from 'view/actions';
 
 export const GithubIssueControlsViewType = 'github-issue-controls-view';
 
+export enum GitHubIssueStatus {
+	CanPush = 'can-push',
+	CanPull = 'can-pull'
+}
 export class GithubIssueControlsView extends ItemView {
 	readonly settings: GitHubIssueEditorSettings;
-	lastCheckDate: string | undefined;
+	fetchDate: string | undefined;
+	status: GitHubIssueStatus | undefined;
 
 	constructor(leaf: WorkspaceLeaf, settings: GitHubIssueEditorSettings) {
 		super(leaf);
@@ -29,12 +34,13 @@ export class GithubIssueControlsView extends ItemView {
 
 	public load(): void {
 		super.load();
-		this.lastCheckDate = undefined;
+		this.fetchDate = undefined;
+		this.status = undefined;
 		this.draw();
 	}
 
-	public saveLastCheckDate(lastCheckDate: string) {
-		this.lastCheckDate = lastCheckDate;
+	public saveFetchDate(fetchDate: string) {
+		this.fetchDate = fetchDate;
 	}
 
 	public reload(editor: MarkdownView | null) {
@@ -54,7 +60,6 @@ export class GithubIssueControlsView extends ItemView {
 
 		const rootElement = document.createElement('div');
 		const issueId = PropertiesHelper.readIssueId(fileOpened.data);
-		const lastDate = PropertiesHelper.readIssueLastData(fileOpened.data);
 
 		const viewContainer = createContainer(rootElement);
 		createInfoSection(
@@ -67,28 +72,31 @@ export class GithubIssueControlsView extends ItemView {
 		);
 
 		createInfoSection(viewContainer, {
-			info: 'Check status',
-			description: issueId ? this.lastCheckDate : 'First push',
+			info: 'Fetch',
+			description: issueId ? this.fetchDate : 'First push',
 			button: {
 				icon: 'refresh-ccw',
 				action: async () => {
-					if (!issueId) {
+					if (!issueId || !fileOpened.file) {
 						return;
 					}
-					const lastCheckDate = await checkStatus(issueId, this.settings);
-					this.saveLastCheckDate(lastCheckDate);
+
+					const fetchedIssue = await fetchIssue(issueId, this.settings, fileOpened.file);
+					this.saveFetchDate(fetchedIssue.date);
+					this.status = fetchedIssue.status;
 					this.reload(editor);
 				}
 			}
 		});
 
 		createInfoSection(viewContainer, {
-			info: 'Push Issue',
-			description: lastDate,
+			info: 'Push',
+			description: this.status === GitHubIssueStatus.CanPush ? 'Changes can be pushed' : '',
 			button: {
 				icon: 'upload',
 				action: async () => {
 					await pushIssue(issueId, fileOpened, this.settings);
+					this.status = undefined;
 					this.reload(editor);
 				}
 			}
@@ -96,11 +104,14 @@ export class GithubIssueControlsView extends ItemView {
 
 		if (issueId) {
 			createInfoSection(viewContainer, {
-				info: 'Pull Issue',
+				info: 'Pull',
+				description:
+					this.status === GitHubIssueStatus.CanPull ? 'New version available' : undefined,
 				button: {
 					icon: 'download',
 					action: async () => {
 						await pullIssue(issueId, fileOpened, this.settings);
+						this.status = undefined;
 						this.reload(editor);
 					}
 				}
