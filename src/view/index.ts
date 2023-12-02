@@ -43,6 +43,7 @@ export class GithubIssueControlsView extends ItemView {
 
 		const rootElement = document.createElement('div');
 		const issueId = PropertiesHelper.readIssueId(fileOpened.data);
+		const lastDate = PropertiesHelper.readIssueLastData(fileOpened.data);
 
 		const viewContainer = createContainer(rootElement);
 		createInfoSection(
@@ -62,6 +63,7 @@ export class GithubIssueControlsView extends ItemView {
 
 		createInfoSection(viewContainer, {
 			info: 'Push Issue',
+			description: lastDate,
 			button: {
 				icon: 'upload',
 				action: async () => {

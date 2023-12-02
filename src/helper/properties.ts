@@ -12,6 +12,7 @@ text: "this is text" (text type)
 */
 
 const GITHUB_ISSUE_PROPERTY_CODE = 'github_issue';
+const GITHUB_ISSUE_LAST_TIME_PROPERTY_CODE = `${GITHUB_ISSUE_PROPERTY_CODE}_last_date`;
 const PROPERTIES_DELIMITER = '---';
 
 export function readProperties(data: string): {
@@ -55,6 +56,19 @@ export function readIssueId(data: string) {
 	return issueId;
 }
 
+export function readIssueLastData(data: string) {
+	const { properties } = readProperties(data);
+	if (!properties) return;
+
+	const githubIssueProperty = properties.find((p) =>
+		p.startsWith(GITHUB_ISSUE_LAST_TIME_PROPERTY_CODE)
+	);
+	if (!githubIssueProperty) return;
+
+	const [, lastDate] = githubIssueProperty.split(/:(.*)/s);
+	return lastDate;
+}
+
 export function writeIssueId(data: string, issueId: string) {
 	const { properties } = readProperties(data);
 
@@ -64,6 +78,19 @@ export function writeIssueId(data: string, issueId: string) {
 			? [...properties.filter((p) => !p.includes(GITHUB_ISSUE_PROPERTY_CODE))]
 			: []),
 		`${GITHUB_ISSUE_PROPERTY_CODE}: ${issueId}`,
+		PROPERTIES_DELIMITER
+	].join('\n');
+}
+
+export function writeIssueLastData(data: string, lastDate: string) {
+	const { properties } = readProperties(data);
+
+	return [
+		PROPERTIES_DELIMITER,
+		...(properties
+			? [...properties.filter((p) => !p.includes(GITHUB_ISSUE_LAST_TIME_PROPERTY_CODE))]
+			: []),
+		`${GITHUB_ISSUE_LAST_TIME_PROPERTY_CODE}: ${lastDate}`,
 		PROPERTIES_DELIMITER
 	].join('\n');
 }
