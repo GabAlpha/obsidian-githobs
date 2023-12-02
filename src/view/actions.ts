@@ -43,3 +43,8 @@ export async function pushIssue(
 		await updateProperties(file, res);
 	}
 }
+
+export async function checkStatus(issueId: string, settings: GitHubIssueEditorSettings) {
+	const res = await Api.getIssue(settings, issueId);
+	return res.json.updated_at;
+}

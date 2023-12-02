@@ -2,12 +2,13 @@ import { ItemView, MarkdownView, WorkspaceLeaf, setIcon } from 'obsidian';
 import { GitHubIssueEditorSettings } from 'settings';
 import { MarkdownFile } from 'types';
 import * as PropertiesHelper from '../helper/properties';
-import { pushIssue } from 'view/actions';
+import { checkStatus, pushIssue } from 'view/actions';
 
 export const GithubIssueControlsViewType = 'github-issue-controls-view';
 
 export class GithubIssueControlsView extends ItemView {
 	readonly settings: GitHubIssueEditorSettings;
+	lastCheckDate: string | undefined;
 
 	constructor(leaf: WorkspaceLeaf, settings: GitHubIssueEditorSettings) {
 		super(leaf);
@@ -28,6 +29,16 @@ export class GithubIssueControlsView extends ItemView {
 
 	public load(): void {
 		super.load();
+		this.lastCheckDate = undefined;
+		this.draw();
+	}
+
+	public saveLastCheckDate(lastCheckDate: string) {
+		this.lastCheckDate = lastCheckDate;
+	}
+
+	public reload(editor: MarkdownView | null) {
+		editor?.editor.focus();
 		this.draw();
 	}
 
@@ -57,8 +68,18 @@ export class GithubIssueControlsView extends ItemView {
 
 		createInfoSection(viewContainer, {
 			info: 'Check status',
-			description: issueId ? '' : 'First push',
-			button: { icon: 'refresh-ccw', action: async () => {} }
+			description: issueId ? this.lastCheckDate : 'First push',
+			button: {
+				icon: 'refresh-ccw',
+				action: async () => {
+					if (!issueId) {
+						return;
+					}
+					const lastCheckDate = await checkStatus(issueId, this.settings);
+					this.saveLastCheckDate(lastCheckDate);
+					this.reload(editor);
+				}
+			}
 		});
 
 		createInfoSection(viewContainer, {
@@ -68,8 +89,7 @@ export class GithubIssueControlsView extends ItemView {
 				icon: 'upload',
 				action: async () => {
 					await pushIssue(issueId, fileOpened, this.settings);
-					editor?.editor.focus();
-					this.load();
+					this.reload(editor);
 				}
 			}
 		});
