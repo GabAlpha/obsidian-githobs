@@ -1,5 +1,8 @@
-import { ItemView, WorkspaceLeaf, setIcon } from 'obsidian';
+import { ItemView, MarkdownView, WorkspaceLeaf, setIcon } from 'obsidian';
 import { GitHubIssueEditorSettings } from 'settings';
+import { MarkdownFile } from 'types';
+import * as PropertiesHelper from '../helper/properties';
+import { pushIssue } from 'view/actions';
 
 export const GithubIssueControlsViewType = 'github-issue-controls-view';
 
@@ -30,7 +33,16 @@ export class GithubIssueControlsView extends ItemView {
 
 	private readonly draw = (): void => {
 		const obContainer = this.containerEl.children[1];
+		const fileOpened = this.leaf.view.app.workspace.activeEditor as MarkdownFile | null;
+		const editor = this.leaf.view.app.workspace.getActiveViewOfType(MarkdownView);
+
+		if (!fileOpened) {
+			obContainer.empty();
+			return;
+		}
+
 		const rootElement = document.createElement('div');
+		const issueId = PropertiesHelper.readIssueId(fileOpened.data);
 
 		const viewContainer = createContainer(rootElement);
 		createInfoSection(
@@ -41,19 +53,31 @@ export class GithubIssueControlsView extends ItemView {
 			},
 			true
 		);
+
 		createInfoSection(viewContainer, {
 			info: 'Check status',
-			description: '',
-			button: { icon: 'refresh-ccw', action: () => {} }
+			description: issueId ? '' : 'First push',
+			button: { icon: 'refresh-ccw', action: async () => {} }
 		});
+
 		createInfoSection(viewContainer, {
 			info: 'Push Issue',
-			button: { icon: 'upload', action: () => {} }
+			button: {
+				icon: 'upload',
+				action: async () => {
+					await pushIssue(issueId, fileOpened, this.settings);
+					editor?.editor.focus();
+					this.load();
+				}
+			}
 		});
-		createInfoSection(viewContainer, {
-			info: 'Pull Issue',
-			button: { icon: 'download', action: () => {} }
-		});
+
+		if (issueId) {
+			createInfoSection(viewContainer, {
+				info: 'Pull Issue',
+				button: { icon: 'download', action: async () => {} }
+			});
+		}
 
 		obContainer.empty();
 		obContainer.appendChild(viewContainer);
@@ -71,7 +95,11 @@ function createInfoSection(
 		info,
 		description,
 		button
-	}: { info: string; description?: string; button?: { icon: string; action: () => void } },
+	}: {
+		info: string;
+		description?: string;
+		button?: { icon: string; action: () => Promise<void> };
+	},
 	headerInfo = false
 ) {
 	let i: HTMLDivElement;
@@ -95,7 +123,14 @@ function createInfoSection(
 		const settingControl = i.createDiv({ cls: 'setting-item-control' });
 		const btn = settingControl.createEl('button');
 		setIcon(btn, button.icon);
-		btn.onclick = button.action;
+
+		btn.onclick = async () => {
+			setIcon(btn, 'hourglass');
+			btn.setAttr('disabled', '');
+			await button.action();
+			setIcon(btn, button.icon);
+			btn.removeAttribute('disabled');
+		};
 	}
 
 	return i;

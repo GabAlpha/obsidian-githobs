@@ -1,7 +1,5 @@
-import { MarkdownFileInfo, MarkdownView, Plugin } from 'obsidian';
+import { Plugin } from 'obsidian';
 
-import * as PropertiesHelper from './helper/properties';
-import * as Api from 'api';
 import { DEFAULT_SETTINGS, GitHubIssueEditorSettings, SettingTab } from 'settings';
 import { GithubIssueControlsView, GithubIssueControlsViewType } from 'view';
 
@@ -35,42 +33,13 @@ export default class GithubIssueEditor extends Plugin {
 				(this.gitHubIssueControlsView = new GithubIssueControlsView(leaf, this.settings))
 		);
 
-		// const syncBtn = this.addRibbonIcon('upload', 'Create a github issue', async () => {
-		// 	const file = this.app.workspace.activeEditor as MarkdownFileInfo & { data: string };
-		// 	const issueId = PropertiesHelper.readIssueId(file.data);
-
-		// 	if (issueId) {
-		// 		await Api.updateIssue(this.settings, issueId, {
-		// 			title: file.file?.basename ?? '',
-		// 			body: PropertiesHelper.removeProperties(file.data)
-		// 		});
-
-		// 		return;
-		// 	}
-
-		// 	const res = await Api.createIssue(this.settings, {
-		// 		title: file.file?.basename ?? '',
-		// 		body: PropertiesHelper.removeProperties(file.data)
-		// 	});
-
-		// 	if (res.status === 201) {
-		// 		const propertiesWithGithubIssue = PropertiesHelper.writeIssueId(
-		// 			file.data!,
-		// 			res.json.number
-		// 		);
-
-		// 		this.app.vault.modify(
-		// 			file.file!,
-		// 			`${propertiesWithGithubIssue}\n${PropertiesHelper.removeProperties(file.data)}`
-		// 		);
-		// 	}
-		// });
-
 		this.addRibbonIcon('github', 'Manage a github issue', async () => {
 			this.toggleGitHubIssueControlsView();
 		});
 
 		this.addSettingTab(new SettingTab(this.app, this));
+
+		this.app.workspace.on('file-open', () => this.gitHubIssueControlsView.load());
 	}
 
 	onunload() {}
