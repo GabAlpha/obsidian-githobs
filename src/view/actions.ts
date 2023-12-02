@@ -2,7 +2,7 @@ import { MarkdownFile } from 'types';
 import * as Api from '../api';
 import * as PropertiesHelper from '../helper/properties';
 import { GitHubIssueEditorSettings } from 'settings';
-import { RequestUrlResponse, TFile } from 'obsidian';
+import { Notice, RequestUrlResponse, TFile } from 'obsidian';
 import { GitHubIssueStatus } from 'view';
 
 async function updateFile(
@@ -11,22 +11,26 @@ async function updateFile(
 	externalData?: string,
 	title?: string
 ) {
-	const propertiesWithGithubIssue = PropertiesHelper.writeIssueId(
-		externalData ?? file.data,
-		res.json.number
-	);
+	try {
+		const propertiesWithGithubIssue = PropertiesHelper.writeIssueId(
+			externalData ?? file.data,
+			res.json.number
+		);
 
-	if (title) {
-		await this.app.vault.rename(file.file, title);
+		if (title) {
+			await this.app.vault.rename(file.file, title);
+		}
+
+		await this.app.vault.modify(
+			file.file,
+			`${propertiesWithGithubIssue}\n${PropertiesHelper.removeProperties(
+				externalData ?? file.data
+			)}`,
+			{ mtime: new Date(res.json.updated_at).getTime() }
+		);
+	} catch {
+		throw new Error('This issue is already tracked');
 	}
-
-	await this.app.vault.modify(
-		file.file,
-		`${propertiesWithGithubIssue}\n${PropertiesHelper.removeProperties(
-			externalData ?? file.data
-		)}`,
-		{ mtime: new Date(res.json.updated_at).getTime() }
-	);
 }
 
 export async function pushIssue(
@@ -85,5 +89,19 @@ export async function pullIssue(
 	settings: GitHubIssueEditorSettings
 ) {
 	const res = await Api.getIssue(settings, issueId);
-	updateFile(file, res, res.json.body, res.json.title);
+	await updateFile(file, res, res.json.body, res.json.title);
+}
+
+export async function changeIssueId(
+	issueId: string,
+	file: MarkdownFile,
+	settings: GitHubIssueEditorSettings
+) {
+	try {
+		await pullIssue(issueId, file, settings);
+
+		new Notice('Issue changed!');
+	} catch (err) {
+		new Notice(err);
+	}
 }

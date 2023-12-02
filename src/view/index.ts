@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ItemView, MarkdownView, WorkspaceLeaf, setIcon } from 'obsidian';
 import { GitHubIssueEditorSettings } from 'settings';
 import { MarkdownFile } from 'types';
 import * as PropertiesHelper from '../helper/properties';
-import { fetchIssue, pullIssue, pushIssue } from 'view/actions';
+import { changeIssueId, fetchIssue, pullIssue, pushIssue } from 'view/actions';
 
 export const GithubIssueControlsViewType = 'github-issue-controls-view';
 
@@ -14,6 +15,7 @@ export class GithubIssueControlsView extends ItemView {
 	readonly settings: GitHubIssueEditorSettings;
 	fetchDate: string | undefined;
 	status: GitHubIssueStatus | undefined;
+	issueId: string | undefined;
 
 	constructor(leaf: WorkspaceLeaf, settings: GitHubIssueEditorSettings) {
 		super(leaf);
@@ -36,11 +38,16 @@ export class GithubIssueControlsView extends ItemView {
 		super.load();
 		this.fetchDate = undefined;
 		this.status = undefined;
+		this.issueId = undefined;
 		this.draw();
 	}
 
-	public saveFetchDate(fetchDate: string) {
+	public setFetchDate(fetchDate: string) {
 		this.fetchDate = fetchDate;
+	}
+
+	public setIssueId(issueId: string | undefined) {
+		this.issueId = issueId;
 	}
 
 	public reload(editor: MarkdownView | null) {
@@ -59,9 +66,10 @@ export class GithubIssueControlsView extends ItemView {
 		}
 
 		const rootElement = document.createElement('div');
-		const issueId = PropertiesHelper.readIssueId(fileOpened.data);
+		this.setIssueId(PropertiesHelper.readIssueId(fileOpened.data));
 
 		const viewContainer = createContainer(rootElement);
+
 		createInfoSection(
 			viewContainer,
 			{
@@ -71,18 +79,38 @@ export class GithubIssueControlsView extends ItemView {
 			true
 		);
 
+		if (this.issueId) {
+			createInfoSection(viewContainer, {
+				info: 'Track',
+				button: {
+					icon: 'github',
+					action: async () =>
+						await changeIssueId(this.issueId!, fileOpened, this.settings)
+				},
+				input: {
+					value: this.issueId?.trim() ?? '',
+					type: 'number',
+					onChange: async (val) => this.setIssueId(val)
+				}
+			});
+		}
+
 		createInfoSection(viewContainer, {
 			info: 'Fetch',
-			description: issueId ? this.fetchDate : 'First push',
+			description: this.issueId ? this.fetchDate : 'First push',
 			button: {
 				icon: 'refresh-ccw',
 				action: async () => {
-					if (!issueId || !fileOpened.file) {
+					if (!this.issueId || !fileOpened.file) {
 						return;
 					}
 
-					const fetchedIssue = await fetchIssue(issueId, this.settings, fileOpened.file);
-					this.saveFetchDate(fetchedIssue.date);
+					const fetchedIssue = await fetchIssue(
+						this.issueId,
+						this.settings,
+						fileOpened.file
+					);
+					this.setFetchDate(fetchedIssue.date);
 					this.status = fetchedIssue.status;
 					this.reload(editor);
 				}
@@ -95,14 +123,14 @@ export class GithubIssueControlsView extends ItemView {
 			button: {
 				icon: 'upload',
 				action: async () => {
-					await pushIssue(issueId, fileOpened, this.settings);
+					await pushIssue(this.issueId, fileOpened, this.settings);
 					this.status = undefined;
 					this.reload(editor);
 				}
 			}
 		});
 
-		if (issueId) {
+		if (this.issueId) {
 			createInfoSection(viewContainer, {
 				info: 'Pull',
 				description:
@@ -110,7 +138,7 @@ export class GithubIssueControlsView extends ItemView {
 				button: {
 					icon: 'download',
 					action: async () => {
-						await pullIssue(issueId, fileOpened, this.settings);
+						await pullIssue(this.issueId!, fileOpened, this.settings);
 						this.status = undefined;
 						this.reload(editor);
 					}
@@ -133,11 +161,15 @@ function createInfoSection(
 	{
 		info,
 		description,
-		button
+		button,
+		dropdown,
+		input
 	}: {
 		info: string;
 		description?: string;
 		button?: { icon: string; action: () => Promise<void> };
+		dropdown?: { items: { text: string; value: string }[] };
+		input?: { type: string; value: string; onChange: (val: string) => Promise<void> };
 	},
 	headerInfo = false
 ) {
@@ -158,18 +190,44 @@ function createInfoSection(
 		}).innerHTML = description;
 	}
 
-	if (button) {
-		const settingControl = i.createDiv({ cls: 'setting-item-control' });
-		const btn = settingControl.createEl('button');
-		setIcon(btn, button.icon);
+	let settingControl: HTMLDivElement;
 
-		btn.onclick = async () => {
-			setIcon(btn, 'hourglass');
-			btn.setAttr('disabled', '');
-			await button.action();
+	if (button || dropdown || input) {
+		settingControl = i.createDiv({ cls: 'setting-item-control' });
+
+		if (input) {
+			const inputEl = settingControl.createEl('input');
+			inputEl.setAttribute('type', input.type);
+			inputEl.setAttribute('value', input.value);
+			inputEl.style.minWidth = '50px';
+			inputEl.style.width = '25%';
+			inputEl.onchange = (val: any) => {
+				input.onChange(val.target.value);
+			};
+		}
+
+		if (dropdown) {
+			const select = settingControl.createEl('select');
+			select.className = 'dropdown';
+			dropdown.items.forEach((i) => {
+				const o = select.createEl('option');
+				o.setAttribute('value', i.value);
+				o.innerHTML = i.text;
+			});
+		}
+
+		if (button) {
+			const btn = settingControl.createEl('button');
 			setIcon(btn, button.icon);
-			btn.removeAttribute('disabled');
-		};
+
+			btn.onclick = async () => {
+				setIcon(btn, 'hourglass');
+				btn.setAttr('disabled', '');
+				await button.action();
+				setIcon(btn, button.icon);
+				btn.removeAttribute('disabled');
+			};
+		}
 	}
 
 	return i;
