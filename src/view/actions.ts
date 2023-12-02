@@ -18,7 +18,12 @@ async function updateFile(
 		);
 
 		if (title) {
-			await this.app.vault.rename(file.file, title);
+			await this.app.vault.rename(
+				file.file,
+				file.file?.parent?.path === '/'
+					? `${title}.md`
+					: `${file.file?.parent?.path}/${title}.md`
+			);
 		}
 
 		await this.app.vault.modify(

@@ -83,7 +83,7 @@ export class GithubIssueControlsView extends ItemView {
 			createInfoSection(viewContainer, {
 				info: 'Track',
 				button: {
-					icon: 'github',
+					icon: 'crosshair',
 					action: async () =>
 						await changeIssueId(this.issueId!, fileOpened, this.settings)
 				},
