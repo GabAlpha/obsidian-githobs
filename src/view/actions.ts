@@ -5,11 +5,20 @@ import { GitHubIssueEditorSettings } from 'settings';
 import { RequestUrlResponse, TFile } from 'obsidian';
 import { GitHubIssueStatus } from 'view';
 
-async function updateFile(file: MarkdownFile, res: RequestUrlResponse, externalData?: string) {
+async function updateFile(
+	file: MarkdownFile,
+	res: RequestUrlResponse,
+	externalData?: string,
+	title?: string
+) {
 	const propertiesWithGithubIssue = PropertiesHelper.writeIssueId(
 		externalData ?? file.data,
 		res.json.number
 	);
+
+	if (title) {
+		await this.app.vault.rename(file.file, title);
+	}
 
 	await this.app.vault.modify(
 		file.file,
@@ -76,5 +85,5 @@ export async function pullIssue(
 	settings: GitHubIssueEditorSettings
 ) {
 	const res = await Api.getIssue(settings, issueId);
-	updateFile(file, res, res.json.body);
+	updateFile(file, res, res.json.body, res.json.title);
 }
