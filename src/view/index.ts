@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ItemView, MarkdownView, WorkspaceLeaf, setIcon } from 'obsidian';
+import { ItemView, MarkdownView, Notice, WorkspaceLeaf, setIcon } from 'obsidian';
 import { GitHubIssueEditorSettings } from 'settings';
 import { MarkdownFile } from 'types';
 import * as PropertiesHelper from '../helper/properties';
@@ -79,21 +79,24 @@ export class GithubIssueControlsView extends ItemView {
 			true
 		);
 
-		if (this.issueId) {
-			createInfoSection(viewContainer, {
-				info: 'Track',
-				button: {
-					icon: 'crosshair',
-					action: async () =>
-						await changeIssueId(this.issueId!, fileOpened, this.settings)
-				},
-				input: {
-					value: this.issueId?.trim() ?? '',
-					type: 'number',
-					onChange: async (val) => this.setIssueId(val)
+		createInfoSection(viewContainer, {
+			info: 'Track',
+			button: {
+				icon: 'crosshair',
+				action: async () => {
+					if (!this.issueId) {
+						new Notice('Select a issue id');
+						return;
+					}
+					return await changeIssueId(this.issueId, fileOpened, this.settings);
 				}
-			});
-		}
+			},
+			input: {
+				value: this.issueId?.trim() ?? '',
+				type: 'number',
+				onChange: async (val) => this.setIssueId(val)
+			}
+		});
 
 		createInfoSection(viewContainer, {
 			info: 'Fetch',
