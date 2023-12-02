@@ -29,15 +29,47 @@ export class GithubIssueControlsView extends ItemView {
 	}
 
 	private readonly draw = (): void => {
-		const container = this.containerEl.children[1];
-		const rootEl = document.createElement('div');
+		const obContainer = this.containerEl.children[1];
+		const rootElement = document.createElement('div');
 
-		const firstRow = rootEl.createDiv({ cls: 'vertical-tab-content-container' });
-		const secondRow = firstRow.createDiv({ cls: 'setting-item setting-item-heading' });
-		const info = secondRow.createDiv({ cls: 'setting-item-info' });
-		info.createDiv({ cls: 'setting-item-name' }).setText('Issue Editor 🦤');
+		const viewContainer = createContainer(rootElement);
+		createInfoSection(
+			viewContainer,
+			{
+				info: 'Issue Editor 🦤',
+				description: `Repo: <strong>${this.settings.repo}</strong>`
+			},
+			true
+		);
 
-		container.empty();
-		container.appendChild(firstRow);
+		obContainer.empty();
+		obContainer.appendChild(viewContainer);
 	};
+}
+
+function createContainer(rootEl: HTMLDivElement) {
+	const c = rootEl.createDiv({ cls: 'vertical-tab-content-container' });
+	return c;
+}
+
+function createInfoSection(
+	containerToAppend: HTMLDivElement,
+	{ info, description }: { info: string; description: string },
+	headerInfo = false
+) {
+	let i: HTMLDivElement;
+
+	if (!headerInfo) {
+		i = containerToAppend.createDiv({ cls: 'setting-item' });
+	} else {
+		i = containerToAppend.createDiv({ cls: 'setting-item setting-item-heading' });
+	}
+
+	const infoElement = i.createDiv({ cls: 'setting-item-info' });
+	infoElement.createDiv({ cls: 'setting-item-name' }).innerHTML = info;
+	infoElement.createDiv({
+		cls: 'setting-item-description'
+	}).innerHTML = description;
+
+	return i;
 }
