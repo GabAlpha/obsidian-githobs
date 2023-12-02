@@ -1,4 +1,4 @@
-import { ItemView, WorkspaceLeaf } from 'obsidian';
+import { ItemView, WorkspaceLeaf, setIcon } from 'obsidian';
 import { GitHubIssueEditorSettings } from 'settings';
 
 export const GithubIssueControlsViewType = 'github-issue-controls-view';
@@ -41,6 +41,19 @@ export class GithubIssueControlsView extends ItemView {
 			},
 			true
 		);
+		createInfoSection(viewContainer, {
+			info: 'Check status',
+			description: '',
+			button: { icon: 'refresh-ccw', action: () => {} }
+		});
+		createInfoSection(viewContainer, {
+			info: 'Push Issue',
+			button: { icon: 'upload', action: () => {} }
+		});
+		createInfoSection(viewContainer, {
+			info: 'Pull Issue',
+			button: { icon: 'download', action: () => {} }
+		});
 
 		obContainer.empty();
 		obContainer.appendChild(viewContainer);
@@ -54,7 +67,11 @@ function createContainer(rootEl: HTMLDivElement) {
 
 function createInfoSection(
 	containerToAppend: HTMLDivElement,
-	{ info, description }: { info: string; description: string },
+	{
+		info,
+		description,
+		button
+	}: { info: string; description?: string; button?: { icon: string; action: () => void } },
 	headerInfo = false
 ) {
 	let i: HTMLDivElement;
@@ -67,9 +84,19 @@ function createInfoSection(
 
 	const infoElement = i.createDiv({ cls: 'setting-item-info' });
 	infoElement.createDiv({ cls: 'setting-item-name' }).innerHTML = info;
-	infoElement.createDiv({
-		cls: 'setting-item-description'
-	}).innerHTML = description;
+
+	if (description) {
+		infoElement.createDiv({
+			cls: 'setting-item-description'
+		}).innerHTML = description;
+	}
+
+	if (button) {
+		const settingControl = i.createDiv({ cls: 'setting-item-control' });
+		const btn = settingControl.createEl('button');
+		setIcon(btn, button.icon);
+		btn.onclick = button.action;
+	}
 
 	return i;
 }
