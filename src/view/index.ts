@@ -2,7 +2,7 @@ import { ItemView, MarkdownView, WorkspaceLeaf, setIcon } from 'obsidian';
 import { GitHubIssueEditorSettings } from 'settings';
 import { MarkdownFile } from 'types';
 import * as PropertiesHelper from '../helper/properties';
-import { checkStatus, pushIssue } from 'view/actions';
+import { checkStatus, pullIssue, pushIssue } from 'view/actions';
 
 export const GithubIssueControlsViewType = 'github-issue-controls-view';
 
@@ -97,7 +97,13 @@ export class GithubIssueControlsView extends ItemView {
 		if (issueId) {
 			createInfoSection(viewContainer, {
 				info: 'Pull Issue',
-				button: { icon: 'download', action: async () => {} }
+				button: {
+					icon: 'download',
+					action: async () => {
+						await pullIssue(issueId, fileOpened, this.settings);
+						this.reload(editor);
+					}
+				}
 			});
 		}
 
