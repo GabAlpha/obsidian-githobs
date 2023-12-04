@@ -37,3 +37,13 @@ export async function updateIssue(
 
 	return res;
 }
+
+export async function getIssue(settings: GitHubIssueEditorSettings, issueId: string) {
+	const res = await requestUrl({
+		url: `https://api.github.com/repos/${settings.owner}/${settings.repo}/issues/${issueId}`,
+		headers: { Authorization: `Bearer ${settings.token}` },
+		method: 'GET'
+	});
+
+	return res;
+}
