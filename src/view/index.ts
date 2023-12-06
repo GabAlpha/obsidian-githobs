@@ -80,7 +80,7 @@ export class GithubIssueControlsView extends ItemView {
 		);
 
 		createInfoSection(viewContainer, {
-			info: 'Track',
+			info: 'Issue number:',
 			button: {
 				icon: 'crosshair',
 				action: async () => {
