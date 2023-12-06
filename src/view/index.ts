@@ -122,7 +122,7 @@ export class GithubIssueControlsView extends ItemView {
 
 		createInfoSection(viewContainer, {
 			info: 'Push',
-			description: this.status === GitHubIssueStatus.CanPush ? 'Changes can be pushed' : '',
+			description: this.status === GitHubIssueStatus.CanPush ? '🟢 Changes can be pushed' : '',
 			button: {
 				icon: 'upload',
 				action: async () => {
@@ -137,7 +137,7 @@ export class GithubIssueControlsView extends ItemView {
 			createInfoSection(viewContainer, {
 				info: 'Pull',
 				description:
-					this.status === GitHubIssueStatus.CanPull ? 'New version available' : undefined,
+					this.status === GitHubIssueStatus.CanPull ? '🔴 New version available' : undefined,
 				button: {
 					icon: 'download',
 					action: async () => {
@@ -202,8 +202,7 @@ function createInfoSection(
 			const inputEl = settingControl.createEl('input');
 			inputEl.setAttribute('type', input.type);
 			inputEl.setAttribute('value', input.value);
-			inputEl.style.minWidth = '50px';
-			inputEl.style.width = '25%';
+			inputEl.style.width = '3.5rem';
 			inputEl.onchange = (val: any) => {
 				input.onChange(val.target.value);
 			};
