@@ -17,8 +17,8 @@ Under the **settings** page, you need to insert those information:
 1. a valid **GitHub token** (link to [create one](https://github.com/settings/tokens))
 	<details>
 	<summary>Token set up: `Select scopes` → `repo`</summary>
-	
-	![GitHobs-Token](https://github.com/GabAlpha/obsidian-githobs/assets/3099816/ab6da472-76b2-4a8e-b8ab-bcebdc485e6c)
+
+ 	![GitHobs-Token](https://github.com/GabAlpha/obsidian-githobs/assets/3099816/e30e1cb3-f5d9-4992-9f4e-10d3fe2ef4b6)
 	</details>
 
 
