@@ -11,7 +11,7 @@ Under the **settings** page, you need to insert those information:
 ![GitHobs-Set](https://github.com/GabAlpha/obsidian-github-issue-editor/assets/3099816/95101e62-8f83-49d3-9c5c-04988e541223)
 
 ### 2️⃣ Edit a file
-Open and **edit your issue** directly from Obsidian
+Open and **edit your issue** directly from Obsidian.
 1. open the dedicated **sidebar**
 3. insert the **issue number** to track anche click <img src="https://github.com/GabAlpha/GitHobs/assets/3099816/ecc2aeee-bad2-4532-b88d-c90faf076034" width="14" height="14" />
 4. make job on your issue
