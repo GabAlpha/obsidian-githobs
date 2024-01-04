@@ -2,16 +2,6 @@
 
 ## 🤷‍♂️ How to use
 
-Use Obsidian as Github Issue Editor!
-
-## API Documentation
-
-See https://github.com/obsidianmd/obsidian-api
-
-# 🤷‍♂️ How to use
-
-## 1️⃣ Set up your plugin
-
 ### 1️⃣ Set up your plugin
 
 Under the **settings** page, you need to insert those information:
@@ -22,7 +12,7 @@ Under the **settings** page, you need to insert those information:
 
 ![GitHobs-Set](https://github.com/GabAlpha/GitHobs/assets/51409681/0eb61b1b-e721-41ce-8dca-9c6d496eb1d8)
 
-## 2️⃣ Edit a file
+### 2️⃣ Edit a file
 
 Open and **edit your issue** directly from Obsidian
 
