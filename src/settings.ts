@@ -18,7 +18,7 @@ function createSetting(
 	container: HTMLElement,
 	args: {
 		name: string;
-		description: string;
+		description?: string | DocumentFragment;
 		placeholder?: string;
 		value: keyof GitHobsSettings;
 	}
@@ -27,7 +27,7 @@ function createSetting(
 
 	new Setting(container)
 		.setName(name)
-		.setDesc(description)
+		.setDesc(description ?? '')
 		.addText((text) =>
 			text
 				.setPlaceholder(placeholder ?? '')
@@ -52,22 +52,30 @@ export class SettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
+		const createHTMLDescription = (innerHTML: string) => {
+			const fragment = document.createDocumentFragment();
+			const div = document.createElement('div');
+			div.innerHTML = innerHTML;
+			fragment.append(div);
+			return fragment;
+		};
+
 		createSetting(this.plugin, containerEl, {
 			name: 'Github Token',
-			description: 'Add the github token',
+			description: createHTMLDescription(
+				'Add the github token, alternately <a href="https://github.com/settings/tokens/new">create one</a>'
+			),
 			placeholder: 'Enter your secret',
 			value: 'token'
 		});
 
 		createSetting(this.plugin, containerEl, {
 			name: 'Owner repo',
-			description: 'The owner of the repo',
 			value: 'owner'
 		});
 
 		createSetting(this.plugin, containerEl, {
 			name: 'Repo name',
-			description: 'The repo name',
 			value: 'repo'
 		});
 	}
