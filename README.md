@@ -29,4 +29,4 @@ Open and **edit your issue** directly from Obsidian
 3. **push** your updates
    ... if you need, before you can **pull**
 
-![GitHobs-Edit](https://github.com/GabAlpha/GitHobs/assets/3099816/89cfced2-1df3-4c96-aff4-086e1741efbd)
+![GitHobs-Edit2](https://github.com/GabAlpha/GitHobs/assets/3099816/31c1bd52-98b5-4782-bed4-c7b35a912d22)
