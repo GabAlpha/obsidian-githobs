@@ -6,10 +6,23 @@ Use Obsidian as Github Issue Editor!
 
 See https://github.com/obsidianmd/obsidian-api
 
+# 🤷‍♂️ How to use
 
-## 🤷‍♂️ How to use
-Open and edit your issue directly from Obsidian
-<video width="100%" height="350" src="https://github.com/GabAlpha/obsidian-github-issue-editor/assets/3099816/2eb113f1-5a7a-4e7c-8931-402141a07916"></video>
+## 1️⃣ Set up your plugin
 
+Under the **settings** page, you need to insert those information:
 
+1. a valid **GitHub token**
+2. the **owner name** of the repository
+3. the **repository name**
 
+## 2️⃣ Edit a file
+
+Open and **edit your issue** directly from Obsidian
+
+1. open the dedicated **sidebar**
+2. insert the **issue number** to track
+3. **push** your updates
+   ... if you need, before you can **pull**
+
+![GitHobs-Edit](https://github.com/GabAlpha/GitHobs/assets/3099816/89cfced2-1df3-4c96-aff4-086e1741efbd)
