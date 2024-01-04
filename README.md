@@ -2,10 +2,11 @@
 
 #### Use Obsidian as Github issue editor!
 
-A simple plugin to create Github issues directly from Obsidian **with Git logic**, with 
-- 🔄 fetch
-- ⬆️ push
-- ⬇️ pull
+A simple plugin to create Github issues directly from Obsidian **with Git logic**. <br>
+Be friendly with: 
+- 🔄 **fetch**
+- ⬆️ **push**
+- ⬇️ **pull**
 
 ---
 
