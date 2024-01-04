@@ -1,6 +1,6 @@
 # GitHobs 🦤
 
-#### Use Obsidian as Github issue editor!
+#### 📝 Use Obsidian as Github issue editor!
 
 A simple plugin to create Github issues directly from Obsidian **with Git logic**. <br>
 Be friendly with: 
