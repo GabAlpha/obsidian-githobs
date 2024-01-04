@@ -14,9 +14,9 @@ Be friendly with:
 
 ### 1️⃣ Set up your plugin
 Under the **settings** page, you need to insert those information:
-1. a valid **GitHub token**
-2. the **owner name** of the repository
-3. the **repository name**
+1. a valid **GitHub token** (link to [create one](https://github.com/settings/tokens))
+2. the **owner name** of the repository (es. _GabAlpha_)
+3. the **repository name** (es. _obsidian-githobs_)
 
 <img src="https://github.com/GabAlpha/obsidian-github-issue-editor/assets/3099816/95101e62-8f83-49d3-9c5c-04988e541223" width="100%" />
 
