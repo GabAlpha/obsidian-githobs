@@ -1,4 +1,6 @@
-# Obsidian Github Issue Editor
+# GitHobs 🦤
+
+## 🤷‍♂️ How to use
 
 Use Obsidian as Github Issue Editor!
 
@@ -9,6 +11,8 @@ See https://github.com/obsidianmd/obsidian-api
 # 🤷‍♂️ How to use
 
 ## 1️⃣ Set up your plugin
+
+### 1️⃣ Set up your plugin
 
 Under the **settings** page, you need to insert those information:
 
