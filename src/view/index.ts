@@ -70,6 +70,32 @@ export class GithubIssueControlsView extends ItemView {
 
 		const viewContainer = createContainer(rootElement);
 
+		if (!this.settings.repo || !this.settings.owner || !this.settings.token) {
+			obContainer.empty();
+
+			createInfoSection(
+				viewContainer,
+				{
+					info: 'Missing settings! 🚨',
+					description: `Please setup settings first`
+				},
+				true
+			);
+
+			createInfoSection(viewContainer, {
+				info: 'Reload',
+				button: {
+					icon: 'refresh-ccw',
+					action: async () => {
+						this.reload(editor);
+					}
+				}
+			});
+
+			obContainer.appendChild(viewContainer);
+			return;
+		}
+
 		createInfoSection(
 			viewContainer,
 			{
@@ -122,7 +148,8 @@ export class GithubIssueControlsView extends ItemView {
 
 		createInfoSection(viewContainer, {
 			info: 'Push',
-			description: this.status === GitHubIssueStatus.CanPush ? '🟢 Changes can be pushed' : '',
+			description:
+				this.status === GitHubIssueStatus.CanPush ? '🟢 Changes can be pushed' : '',
 			button: {
 				icon: 'upload',
 				action: async () => {
@@ -137,7 +164,9 @@ export class GithubIssueControlsView extends ItemView {
 			createInfoSection(viewContainer, {
 				info: 'Pull',
 				description:
-					this.status === GitHubIssueStatus.CanPull ? '🔴 New version available' : undefined,
+					this.status === GitHubIssueStatus.CanPull
+						? '🔴 New version available'
+						: undefined,
 				button: {
 					icon: 'download',
 					action: async () => {
@@ -203,6 +232,7 @@ function createInfoSection(
 			inputEl.setAttribute('type', input.type);
 			inputEl.setAttribute('value', input.value);
 			inputEl.style.width = '3.5rem';
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			inputEl.onchange = (val: any) => {
 				input.onChange(val.target.value);
 			};
