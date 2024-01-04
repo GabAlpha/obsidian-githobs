@@ -1,10 +1,10 @@
 import { Plugin } from 'obsidian';
 
-import { DEFAULT_SETTINGS, GitHubIssueEditorSettings, SettingTab } from 'settings';
+import { DEFAULT_SETTINGS, GitHobsSettings, SettingTab } from 'settings';
 import { GithubIssueControlsView, GithubIssueControlsViewType } from 'view';
 
-export default class GithubIssueEditor extends Plugin {
-	settings: GitHubIssueEditorSettings;
+export default class GitHobs extends Plugin {
+	settings: GitHobsSettings;
 	gitHubIssueControlsView: GithubIssueControlsView;
 
 	private readonly toggleGitHubIssueControlsView = async (): Promise<void> => {

@@ -1,26 +1,26 @@
-import GithubIssueEditor from 'main';
+import GitHobs from 'main';
 import { App, PluginSettingTab, Setting } from 'obsidian';
 
-export interface GitHubIssueEditorSettings {
+export interface GitHobsSettings {
 	token: string;
 	owner: string;
 	repo: string;
 }
 
-export const DEFAULT_SETTINGS: GitHubIssueEditorSettings = {
+export const DEFAULT_SETTINGS: GitHobsSettings = {
 	token: '',
 	owner: '',
 	repo: ''
 };
 
 function createSetting(
-	plugin: GithubIssueEditor,
+	plugin: GitHobs,
 	container: HTMLElement,
 	args: {
 		name: string;
 		description: string;
 		placeholder?: string;
-		value: keyof GitHubIssueEditorSettings;
+		value: keyof GitHobsSettings;
 	}
 ) {
 	const { name, description, placeholder, value } = args;
@@ -40,9 +40,9 @@ function createSetting(
 }
 
 export class SettingTab extends PluginSettingTab {
-	plugin: GithubIssueEditor;
+	plugin: GitHobs;
 
-	constructor(app: App, plugin: GithubIssueEditor) {
+	constructor(app: App, plugin: GitHobs) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}

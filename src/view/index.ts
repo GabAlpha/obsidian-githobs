@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ItemView, MarkdownView, Notice, WorkspaceLeaf, setIcon } from 'obsidian';
-import { GitHubIssueEditorSettings } from 'settings';
+import { GitHobsSettings } from 'settings';
 import { MarkdownFile } from 'types';
 import * as PropertiesHelper from '../helper/properties';
 import { changeIssueId, fetchIssue, pullIssue, pushIssue } from 'view/actions';
@@ -12,12 +12,12 @@ export enum GitHubIssueStatus {
 	CanPull = 'can-pull'
 }
 export class GithubIssueControlsView extends ItemView {
-	readonly settings: GitHubIssueEditorSettings;
+	readonly settings: GitHobsSettings;
 	fetchDate: string | undefined;
 	status: GitHubIssueStatus | undefined;
 	issueId: string | undefined;
 
-	constructor(leaf: WorkspaceLeaf, settings: GitHubIssueEditorSettings) {
+	constructor(leaf: WorkspaceLeaf, settings: GitHobsSettings) {
 		super(leaf);
 		this.settings = settings;
 	}

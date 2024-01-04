@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-github-issue-editor",
+	"name": "obsidian-githobs",
 	"version": "0.1.0",
-	"description": "The plugin to use Obsidian as a Github issue editor",
+	"description": "Use Obsidian as Github issue editor!",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",

@@ -1,7 +1,7 @@
 import { MarkdownFile } from 'types';
 import * as Api from '../api';
 import * as PropertiesHelper from '../helper/properties';
-import { GitHubIssueEditorSettings } from 'settings';
+import { GitHobsSettings } from 'settings';
 import { Notice, RequestUrlResponse, TFile } from 'obsidian';
 import { GitHubIssueStatus } from 'view';
 
@@ -41,7 +41,7 @@ async function updateFile(
 export async function pushIssue(
 	issueId: string | undefined,
 	file: MarkdownFile,
-	settings: GitHubIssueEditorSettings
+	settings: GitHobsSettings
 ) {
 	if (issueId) {
 		const res = await Api.updateIssue(settings, issueId, {
@@ -65,11 +65,7 @@ export async function pushIssue(
 	}
 }
 
-export async function fetchIssue(
-	issueId: string,
-	settings: GitHubIssueEditorSettings,
-	file: TFile
-) {
+export async function fetchIssue(issueId: string, settings: GitHobsSettings, file: TFile) {
 	const res = await Api.getIssue(settings, issueId);
 
 	const fileRead = this.app.vault.getFiles().find((f: TFile) => f.path === file.path);
@@ -88,11 +84,7 @@ export async function fetchIssue(
 	return { date: res.json.updated_at, status };
 }
 
-export async function pullIssue(
-	issueId: string,
-	file: MarkdownFile,
-	settings: GitHubIssueEditorSettings
-) {
+export async function pullIssue(issueId: string, file: MarkdownFile, settings: GitHobsSettings) {
 	const res = await Api.getIssue(settings, issueId);
 	await updateFile(file, res, res.json.body, res.json.title);
 }
@@ -100,7 +92,7 @@ export async function pullIssue(
 export async function changeIssueId(
 	issueId: string,
 	file: MarkdownFile,
-	settings: GitHubIssueEditorSettings
+	settings: GitHobsSettings
 ) {
 	try {
 		await pullIssue(issueId, file, settings);

@@ -1,8 +1,8 @@
 import { Notice, requestUrl } from 'obsidian';
-import { GitHubIssueEditorSettings } from 'settings';
+import { GitHobsSettings } from 'settings';
 
 export async function createIssue(
-	settings: GitHubIssueEditorSettings,
+	settings: GitHobsSettings,
 	body: { title: string; body: string }
 ) {
 	const res = await requestUrl({
@@ -20,7 +20,7 @@ export async function createIssue(
 }
 
 export async function updateIssue(
-	settings: GitHubIssueEditorSettings,
+	settings: GitHobsSettings,
 	issueId: string,
 	body: { title: string; body: string }
 ) {
@@ -38,7 +38,7 @@ export async function updateIssue(
 	return res;
 }
 
-export async function getIssue(settings: GitHubIssueEditorSettings, issueId: string) {
+export async function getIssue(settings: GitHobsSettings, issueId: string) {
 	const res = await requestUrl({
 		url: `https://api.github.com/repos/${settings.owner}/${settings.repo}/issues/${issueId}`,
 		headers: { Authorization: `Bearer ${settings.token}` },
