@@ -30,7 +30,7 @@ Under the **settings** page, you need to insert those information:
 ### 2️⃣ Edit a file
 Open and **edit your issue** directly from Obsidian:
 1. open the dedicated **sidebar**
-3. insert the **issue number** to track anche click <img src="https://github.com/GabAlpha/GitHobs/assets/3099816/ecc2aeee-bad2-4532-b88d-c90faf076034" width="14" height="14" />
+3. insert the **issue number** to track and click
 4. make job on your issue
 5. **push** your updates to the repo
 6. if you need, before you can **pull**
