@@ -52,18 +52,26 @@ export class SettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		const createHTMLDescription = (innerHTML: string) => {
+		const createDescriptionWithLink = ({
+			text,
+			href,
+			aText
+		}: {
+			text: string;
+			href: string;
+			aText: string;
+		}) => {
 			const fragment = document.createDocumentFragment();
-			const div = document.createElement('div');
-			div.innerHTML = innerHTML;
+			const div = fragment.createDiv({ text: text });
+			div.createEl('a', { href: href, text: aText });
 			fragment.append(div);
 			return fragment;
 		};
 
 		createSetting(this.plugin, containerEl, {
 			name: 'Github Token',
-			description: createHTMLDescription(
-				'Add the github token, alternately <a href="https://github.com/settings/tokens/new">create one</a>'
+			description: createDescriptionWithLink(
+				{href: "https://github.com/settings/tokens/new", text: "Add the github token, alternately ", aText: 'create one'}
 			),
 			placeholder: 'Enter your secret',
 			value: 'token'

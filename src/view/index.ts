@@ -100,7 +100,8 @@ export class GithubIssueControlsView extends ItemView {
 			viewContainer,
 			{
 				info: 'Issue Editor 🦤',
-				description: `Repo: <strong>${this.settings.repo}</strong>`
+				description: 'Repo: ',
+				descriptionBold: this.settings.repo
 			},
 			true
 		);
@@ -193,12 +194,14 @@ function createInfoSection(
 	{
 		info,
 		description,
+		descriptionBold,
 		button,
 		dropdown,
 		input
 	}: {
 		info: string;
 		description?: string;
+		descriptionBold?: string;
 		button?: { icon: string; action: () => Promise<void> };
 		dropdown?: { items: { text: string; value: string }[] };
 		input?: { type: string; value: string; onChange: (val: string) => Promise<void> };
@@ -214,12 +217,17 @@ function createInfoSection(
 	}
 
 	const infoElement = i.createDiv({ cls: 'setting-item-info' });
-	infoElement.createDiv({ cls: 'setting-item-name' }).innerHTML = info;
+	infoElement.createDiv({ cls: 'setting-item-name', text: info });
 
 	if (description) {
-		infoElement.createDiv({
-			cls: 'setting-item-description'
-		}).innerHTML = description;
+		const descEl = infoElement.createDiv({
+			cls: 'setting-item-description',
+			text: description
+		});
+
+		if (descriptionBold) {
+			descEl.createEl('strong', { text: descriptionBold });
+		}
 	}
 
 	let settingControl: HTMLDivElement;
@@ -242,9 +250,8 @@ function createInfoSection(
 			const select = settingControl.createEl('select');
 			select.className = 'dropdown';
 			dropdown.items.forEach((i) => {
-				const o = select.createEl('option');
+				const o = select.createEl('option', { text: i.text });
 				o.setAttribute('value', i.value);
-				o.innerHTML = i.text;
 			});
 		}
 
