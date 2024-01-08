@@ -18,9 +18,9 @@ There are two way to get the plugin:
 - from plugin store
 
 ### 🤲 Manual installation
+- Download the **Source code (zip)** file from the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/latest/) 
 - Download **main.js** and **manifest.json** from the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/latest/) 
-- In your Obsidian vaults **.obsidian/plugins/** folder, create a new directory called **`githobs`** 
-- Place the downloaded files in this folder 
+- In your Obsidian vaults **.obsidian/plugins/** folder, upload the unzipped folder and the other 2 files
 
 ### 🏪 Browse Community plugins
 > [!CAUTION]
