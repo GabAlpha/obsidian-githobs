@@ -1,6 +1,6 @@
 # GitHobs 🦤
 
-#### 📝 Use Obsidian as Github issue editor!
+### 📝 Use Obsidian as Github issue editor!
 
 A simple plugin to create Github issues directly from Obsidian **with Git logic**. <br>
 Be friendly with: 
@@ -10,25 +10,25 @@ Be friendly with:
 
 ---
 
-## 🤷‍♂️ How to use
+# 🤷‍♂️ How to use
 
-### 1️⃣ Install plugin 
-There are two way to install: 
-- manual installation
-- by Community plugins
+## 1️⃣ Install plugin 
+There are two way to get the plugin: 
+- install manually
+- from plugin store
 
-#### Manual installation
+### 🤲 Manual installation
 - Download **main.js** and **manifest.json** form the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/). <br>
 - Create a new directory in your Obsidian vaults **.obsidian/plugins/** folder called `githobs`.
 - Place the downloaded files in the folder.
 
-#### Browse Community plugins
+### 🏪 Browse Community plugins
 > [!CAUTION]
 > **Available soon** 
 > _This plugin is in the Obsidian community plugin store. <br>
 You can find it by searching in the store: **`githobs`**_
 
-### 2️⃣ Set up your plugin
+## 2️⃣ Set up your plugin
 Under the **settings** page, you need to insert those information:
 1. a valid **GitHub token** (link to [create one](https://github.com/settings/tokens))
 	<details>
@@ -43,7 +43,7 @@ Under the **settings** page, you need to insert those information:
 
 <img src="https://github.com/GabAlpha/obsidian-github-issue-editor/assets/3099816/95101e62-8f83-49d3-9c5c-04988e541223" width="100%" />
 
-### 3️⃣ Edit a file
+## 3️⃣ Enjoy the plugin
 Open and **edit your issue** directly from Obsidian:
 1. open the dedicated **sidebar**
 3. insert the **issue number** to track and click
