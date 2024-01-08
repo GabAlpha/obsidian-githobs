@@ -31,7 +31,7 @@ You can find it by searching in the store: **`githobs`**_
 ## 2️⃣ Set up your plugin
 Under the **settings** page, you need to insert those information:
 1. a valid **GitHub token** (link to [create one](https://github.com/settings/tokens)) <br>
-Are required **repo** scopes (repo:status, repo_deployment, public_repo, repo:invite, security_events)
+Is just required **repo** scope (repo:status, repo_deployment, public_repo, repo:invite, security_events)
 
 	<details>
 	<summary>🖼️ Screen Token set up</summary>
