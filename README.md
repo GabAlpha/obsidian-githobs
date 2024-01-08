@@ -19,7 +19,7 @@ There are two way to get the plugin:
 
 ### 🤲 Manual installation
 - Download **main.js** and **manifest.json** form the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/) 
-- Create a new directory called **`githobs`**, in your Obsidian vaults **.obsidian/plugins/** folder 
+- In your Obsidian vaults **.obsidian/plugins/** folder, create a new directory called **`githobs`** 
 - Place the downloaded files in the folder 
 
 ### 🏪 Browse Community plugins
