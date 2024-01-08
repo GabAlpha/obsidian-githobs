@@ -13,17 +13,20 @@ Be friendly with:
 ## 🤷‍♂️ How to use
 
 ### 1️⃣ Install plugin 
+There are two way to install: 
+- manual installation
+- by Community plugins
 
 #### Manual installation
-- Download main.js and manifest.json form the releases page. <br>
-- Create a new directory in your Obsidian vaults .obsidian/plugins/ folder called `githobs`.
-- Place the downloaded files in your folder.
+- Download **main.js** and **manifest.json** form the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/). <br>
+- Create a new directory in your Obsidian vaults **.obsidian/plugins/** folder called `githobs`.
+- Place the downloaded files in the folder.
 
-
-
+#### Browse Community plugins
 > [!CAUTION]
-> **Available soon** <br>
-> _This plugin is in the Obsidian community plugin store. You can find it by searching in the store: **`githobs`**_
+> **Available soon** 
+> _This plugin is in the Obsidian community plugin store. <br>
+You can find it by searching in the store: **`githobs`**_
 
 ### 2️⃣ Set up your plugin
 Under the **settings** page, you need to insert those information:
