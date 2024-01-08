@@ -18,13 +18,13 @@ There are two way to get the plugin:
 - from plugin store
 
 ### 🤲 Manual installation
-- Download **main.js** and **manifest.json** form the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/). <br>
-- Create a new directory in your Obsidian vaults **.obsidian/plugins/** folder called `githobs`.
-- Place the downloaded files in the folder.
+- Download **main.js** and **manifest.json** form the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/) 
+- Create a new directory called **`githobs`**, in your Obsidian vaults **.obsidian/plugins/** folder 
+- Place the downloaded files in the folder 
 
 ### 🏪 Browse Community plugins
 > [!CAUTION]
-> **Available soon** 
+> **Available soon** <br>
 > _This plugin is in the Obsidian community plugin store. <br>
 You can find it by searching in the store: **`githobs`**_
 
