@@ -59,7 +59,7 @@ Open and **edit your issue** directly from Obsidian:
 Feel free to support the development... thanks!
 If you like this plugin, buy me a coffe 👇
 
-<a href="https://www.buymeacoffee.com/gabalpha" target="_blank"><img src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/1f72f589-59b1-4e57-8c3a-9b5903c6f6f1" width="50%" /></a>
+<a href="https://www.buymeacoffee.com/gabalpha" target="_blank"><img src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/1f72f589-59b1-4e57-8c3a-9b5903c6f6f1" width="228" /></a>
 
 ---
 
