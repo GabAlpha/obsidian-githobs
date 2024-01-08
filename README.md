@@ -50,7 +50,7 @@ Open and **edit your issue** directly from Obsidian:
 3. insert the **issue number** to track and click
 4. make job on your issue
 5. **push** your updates to the repo
-6. if you need, before you can **pull**
+6. if you need, before you can **pull** and of course **fetch**
 
 <img src="https://github.com/GabAlpha/GitHobs/assets/3099816/31c1bd52-98b5-4782-bed4-c7b35a912d22" width="100%" />
 
