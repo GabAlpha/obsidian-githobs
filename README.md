@@ -18,9 +18,9 @@ There are two way to get the plugin:
 - from plugin store
 
 ### 🤲 Manual installation
-- Download **main.js** and **manifest.json** form the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/latest/) 
+- Download **main.js** and **manifest.json** from the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/latest/) 
 - In your Obsidian vaults **.obsidian/plugins/** folder, create a new directory called **`githobs`** 
-- Place the downloaded files in the folder 
+- Place the downloaded files in this folder 
 
 ### 🏪 Browse Community plugins
 > [!CAUTION]
@@ -30,13 +30,14 @@ You can find it by searching in the store: **`githobs`**_
 
 ## 2️⃣ Set up your plugin
 Under the **settings** page, you need to insert those information:
-1. a valid **GitHub token** (link to [create one](https://github.com/settings/tokens))
+1. a valid **GitHub token** (link to [create one](https://github.com/settings/tokens)) <br>
+Are required **repo** scopes (repo:status, repo_deployment, public_repo, repo:invite, security_events)
+
 	<details>
-	<summary>Token set up: `Select scopes` → `repo`</summary>
+	<summary>🖼️ Screen Token set up</summary>
 
  	![GitHobs-Token](https://github.com/GabAlpha/obsidian-githobs/assets/3099816/e30e1cb3-f5d9-4992-9f4e-10d3fe2ef4b6)
 	</details>
-
 
 3. the **owner name** of the repository (es. _GabAlpha_)
 4. the **repository name** (es. _obsidian-githobs_)
