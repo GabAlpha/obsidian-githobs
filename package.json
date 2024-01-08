@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-githobs",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "Use Obsidian as Github issue editor!",
 	"main": "main.js",
 	"scripts": {
@@ -8,8 +8,15 @@
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
-	"keywords": [],
-	"author": "",
+	"keywords": [
+		"github",
+		"issue",
+		"obsidian",
+		"obsidian-plugin",
+		"obsidian-md",
+		"obsidian-vault"
+	],
+	"author": "GabAlpha and MarcoG",
 	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^16.11.6",
