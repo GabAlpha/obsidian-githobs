@@ -56,7 +56,7 @@ Open and **edit your issue** directly from Obsidian:
 ---
 
 # ❤️ Support the project
-> I'm **[Gabriele](https://github.com/GabAlpha)** web developer from 🇮🇹 Milan, Italy <br>
+> I'm **[Gabriele](https://github.com/GabAlpha)**, web developer from Milan 🇮🇹 <br>
 > 🎉 Linux & Open Source enthusiast
 
 Feel free to support the development... thanks! 🙏 <br>
