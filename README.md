@@ -19,10 +19,9 @@ There are two way to get the plugin:
 
 ### 🤲 Manual installation
 - Download from the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/latest/)
-	- **Source code (zip)** 
 	- **main.js** 
 	- **manifest.json** 
-- In your Obsidian vaults **.obsidian/plugins/** folder, upload the unzipped folder and the other 2 files
+- In your Obsidian vaults **.obsidian/plugins/** folder, upload those 2 files
 
 ### 🏪 Browse Community plugins
 > [!CAUTION]
