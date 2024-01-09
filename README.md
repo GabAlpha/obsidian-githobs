@@ -18,7 +18,7 @@ There are two way to get the plugin:
 - from plugin store
 
 ### 🤲 Manual installation
-- Download from the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/latest/)
+- Download from the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/latest/): 
 	- **main.js** 
 	- **manifest.json** 
 - In your Obsidian vaults **.obsidian/plugins/** folder, upload those 2 files
