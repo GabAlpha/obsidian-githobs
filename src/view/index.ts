@@ -236,10 +236,9 @@ function createInfoSection(
 		settingControl = i.createDiv({ cls: 'setting-item-control' });
 
 		if (input) {
-			const inputEl = settingControl.createEl('input');
+			const inputEl = settingControl.createEl('input', { cls: 'githobs-input' });
 			inputEl.setAttribute('type', input.type);
 			inputEl.setAttribute('value', input.value);
-			inputEl.style.width = '3.5rem';
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			inputEl.onchange = (val: any) => {
 				input.onChange(val.target.value);
