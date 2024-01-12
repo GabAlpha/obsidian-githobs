@@ -21,7 +21,7 @@ There are two way to get the plugin:
 - Download from the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/latest/): 
 	- **main.js** 
 	- **manifest.json** 
-- In your Obsidian vaults **.obsidian/plugins/** folder, upload those 2 files
+- In your Obsidian vaults **.obsidian/plugins/** folder, create **`githobs`** folder and upload those 2 files
 
 ### 🏪 Browse Community plugins
 > [!CAUTION]
