@@ -55,6 +55,7 @@ Is just required **repo** scope (repo:status, repo_deployment, public_repo, repo
 
 Open and **edit your issue** directly from Obsidian:
 1. open the dedicated **sidebar**
+2. create new note
 3. insert the **issue number** to track and click
 4. make job on your issue
 5. **push** your updates to the repo
