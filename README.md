@@ -31,6 +31,10 @@ There are two way to get the plugin:
 You can find it by searching in the store: **`githobs`**_
 
 ## 2️⃣ Set up your plugin
+
+<img width="100%" alt="image" src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/fc72b722-35e5-4b33-9ed6-dc4b7671088f">
+<!-- img width="100%" src="https://github.com/GabAlpha/obsidian-github-issue-editor/assets/3099816/95101e62-8f83-49d3-9c5c-04988e541223" -->
+
 Under the **settings** page, you need to insert those information:
 1. a valid **GitHub token** (link to [create one](https://github.com/settings/tokens)) <br>
 Is just required **repo** scope (repo:status, repo_deployment, public_repo, repo:invite, security_events)
@@ -44,19 +48,17 @@ Is just required **repo** scope (repo:status, repo_deployment, public_repo, repo
 3. the **owner name** of the repository (es. _GabAlpha_)
 4. the **repository name** (es. _obsidian-githobs_)
 
-<img width="100%" alt="image" src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/fc72b722-35e5-4b33-9ed6-dc4b7671088f">
-<!-- img width="100%" src="https://github.com/GabAlpha/obsidian-github-issue-editor/assets/3099816/95101e62-8f83-49d3-9c5c-04988e541223" -->
-
 ## 3️⃣ Enjoy the plugin
+
+<img src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/48dce5a4-bff7-4c24-ae5d-71967338419d" width="100%">
+<!-- img src="https://github.com/GabAlpha/GitHobs/assets/3099816/31c1bd52-98b5-4782-bed4-c7b35a912d22" width="100%" -->
+
 Open and **edit your issue** directly from Obsidian:
 1. open the dedicated **sidebar**
 3. insert the **issue number** to track and click
 4. make job on your issue
 5. **push** your updates to the repo
 6. if you need, before you can **pull** and of course **fetch**
-
-<img src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/48dce5a4-bff7-4c24-ae5d-71967338419d" width="100%">
-<!-- img src="https://github.com/GabAlpha/GitHobs/assets/3099816/31c1bd52-98b5-4782-bed4-c7b35a912d22" width="100%" -->
 
 ---
 
@@ -75,5 +77,5 @@ If you like this plugin, buy me a coffe 👇
 [![stars - obsidian-githobs](https://img.shields.io/github/stars/gabalpha/obsidian-githobs?style=social)](https://github.com/gabalpha/obsidian-githobs)
 [![forks - obsidian-githobs](https://img.shields.io/github/forks/gabalpha/obsidian-githobs?style=social)](https://github.com/gabalpha/obsidian-githobs)
 
----
+<br><br><br>
 
