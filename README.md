@@ -44,7 +44,8 @@ Is just required **repo** scope (repo:status, repo_deployment, public_repo, repo
 3. the **owner name** of the repository (es. _GabAlpha_)
 4. the **repository name** (es. _obsidian-githobs_)
 
-<img src="https://github.com/GabAlpha/obsidian-github-issue-editor/assets/3099816/95101e62-8f83-49d3-9c5c-04988e541223" width="100%" />
+<img width="100%" alt="image" src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/fc72b722-35e5-4b33-9ed6-dc4b7671088f">
+<!-- img width="100%" src="https://github.com/GabAlpha/obsidian-github-issue-editor/assets/3099816/95101e62-8f83-49d3-9c5c-04988e541223" -->
 
 ## 3️⃣ Enjoy the plugin
 Open and **edit your issue** directly from Obsidian:
