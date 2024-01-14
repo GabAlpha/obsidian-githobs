@@ -76,6 +76,3 @@ If you like this plugin, buy me a coffe 👇
 [![License](https://img.shields.io/badge/License-MIT-ffdd04)](https://github.com/gabalpha/obsidian-githobs/blob/main/LICENSE)
 [![stars - obsidian-githobs](https://img.shields.io/github/stars/gabalpha/obsidian-githobs?style=social)](https://github.com/gabalpha/obsidian-githobs)
 [![forks - obsidian-githobs](https://img.shields.io/github/forks/gabalpha/obsidian-githobs?style=social)](https://github.com/gabalpha/obsidian-githobs)
-
-<br><br><br>
-
