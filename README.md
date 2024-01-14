@@ -10,7 +10,7 @@ Be friendly with:
 
 ---
 
-# 🤷‍♂️ How to use
+# How to use 🤷‍♂️
 
 ## 1️⃣ Install plugin 
 There are two way to get the plugin: 
@@ -62,17 +62,17 @@ Open and **edit your issue** directly from Obsidian:
 
 ---
 
-# ❤️ Support the project
+# Support the project ❤️
 > [!TIP]
 > I'm **[Gabriele](https://github.com/GabAlpha)**, web developer from Milan 🇮🇹 <br>
 > Linux & Open Source enthusiast 🎉
-
-If you like this plugin, feel free to **support the development**... thanks! 🙏 <br>
-
-<a href="https://www.buymeacoffee.com/gabalpha" target="_blank"><img src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/1f72f589-59b1-4e57-8c3a-9b5903c6f6f1" width="200" /></a>
-
-[![gabalpha - obsidian-githobs](https://img.shields.io/static/v1?label=gabalpha&message=obsidian-githobs&color=ffdd04&logo=github)](https://github.com/gabalpha/obsidian-githobs "Go to GitHub repo")
-[![GitHub release](https://img.shields.io/github/release/gabalpha/obsidian-githobs?include_prereleases=&sort=semver&color=ffdd04)](https://github.com/gabalpha/obsidian-githobs/releases/)
-[![License](https://img.shields.io/badge/License-MIT-ffdd04)](https://github.com/gabalpha/obsidian-githobs/blob/main/LICENSE)
-[![stars - obsidian-githobs](https://img.shields.io/github/stars/gabalpha/obsidian-githobs?style=social)](https://github.com/gabalpha/obsidian-githobs)
-[![forks - obsidian-githobs](https://img.shields.io/github/forks/gabalpha/obsidian-githobs?style=social)](https://github.com/gabalpha/obsidian-githobs)
+> 
+> If you like this plugin, feel free to **support the development**... thanks! 🙏 <br>
+> 
+> <a href="https://www.buymeacoffee.com/gabalpha" target="_blank"><img src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/1f72f589-59b1-4e57-8c3a-9b5903c6f6f1" width="200" /></a>
+> 
+> [![gabalpha - obsidian-githobs](https://img.shields.io/static/v1?label=gabalpha&message=obsidian-githobs&color=ffdd04&logo=github)](https://github.com/gabalpha/obsidian-githobs "Go to GitHub repo")
+> [![GitHub release](https://img.shields.io/github/release/gabalpha/obsidian-githobs?include_prereleases=&sort=semver&color=ffdd04)](https://github.com/gabalpha/obsidian-githobs/releases/)
+> [![License](https://img.shields.io/badge/License-MIT-ffdd04)](https://github.com/gabalpha/obsidian-githobs/blob/main/LICENSE)
+> [![stars - obsidian-githobs](https://img.shields.io/github/stars/gabalpha/obsidian-githobs?style=social)](https://github.com/gabalpha/obsidian-githobs)
+> [![forks - obsidian-githobs](https://img.shields.io/github/forks/gabalpha/obsidian-githobs?style=social)](https://github.com/gabalpha/obsidian-githobs)
