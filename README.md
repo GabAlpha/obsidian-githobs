@@ -50,7 +50,7 @@ Is just required **repo** scope (repo:status, repo_deployment, public_repo, repo
 
 ## 3️⃣ Enjoy the plugin
 
-<img src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/48dce5a4-bff7-4c24-ae5d-71967338419d" width="100%">
+<img src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/7770efc5-13db-4583-9e19-9657144b467a" width="100%">
 <!-- img src="https://github.com/GabAlpha/GitHobs/assets/3099816/31c1bd52-98b5-4782-bed4-c7b35a912d22" width="100%" -->
 
 Open and **edit your issue** directly from Obsidian:
