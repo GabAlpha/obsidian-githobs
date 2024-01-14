@@ -45,8 +45,8 @@ Is just required **repo** scope (repo:status, repo_deployment, public_repo, repo
 	<img width="100%" alt="Github Token" src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/7690b706-38d0-4ce0-b05f-6c10ce213db5">
 	</details>
 
-3. the **owner name** of the repository (es. _GabAlpha_)
-4. the **repository name** (es. _obsidian-githobs_)
+2. the **owner name** of the repository (es. _GabAlpha_)
+3. the **repository name** (es. _obsidian-githobs_)
 
 ## 3️⃣ Enjoy the plugin
 
