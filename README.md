@@ -42,7 +42,7 @@ Is just required **repo** scope (repo:status, repo_deployment, public_repo, repo
 	<details>
 	<summary>🖼️ Screen Token set up</summary>
 
- 	![GitHobs-Token](https://github.com/GabAlpha/obsidian-githobs/assets/3099816/e30e1cb3-f5d9-4992-9f4e-10d3fe2ef4b6)
+	<img width="100%" alt="Github Token" src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/7690b706-38d0-4ce0-b05f-6c10ce213db5">
 	</details>
 
 3. the **owner name** of the repository (es. _GabAlpha_)
