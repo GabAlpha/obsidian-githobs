@@ -20,9 +20,10 @@ There are two way to get the plugin:
 ### 🤲 Manual installation
 - Download from the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/latest/): 
 	- **main.js** 
-	- **manifest.json** 
+	- **manifest.json**
+    - **styles.css**  
 - In your Obsidian vaults **.obsidian/plugins/** folder, create **`githobs`** folder
-- Paste here those 2 files
+- Paste here those 3 files
 
 ### 🏪 Browse Community plugins
 > [!CAUTION]
