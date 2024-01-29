@@ -39,7 +39,9 @@ export default class GitHobs extends Plugin {
 
 		this.addSettingTab(new SettingTab(this.app, this));
 
-		this.app.workspace.on('file-open', () => this.gitHubIssueControlsView.load());
+		this.registerEvent(
+			this.app.workspace.on('file-open', () => this.gitHubIssueControlsView.load())
+		);
 	}
 
 	onunload() {}
