@@ -14,7 +14,7 @@ Be friendly with:
 
 ## 1️⃣ Install plugin 
 
-<img width="1136" alt="image" src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/38ce74a5-9dab-4c04-b079-a55a54116580">
+<img width="100%" alt="githobs install" src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/38ce74a5-9dab-4c04-b079-a55a54116580">
 
 Browse Community plugins: 
 - open _Settings_
@@ -35,8 +35,7 @@ Alternatively, you ca install manually:
 
 ## 2️⃣ Set up your plugin
 
-<img width="100%" alt="image" src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/fc72b722-35e5-4b33-9ed6-dc4b7671088f">
-<!-- img width="100%" src="https://github.com/GabAlpha/obsidian-github-issue-editor/assets/3099816/95101e62-8f83-49d3-9c5c-04988e541223" -->
+<img width="100%" alt="githobs setting" src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/fc72b722-35e5-4b33-9ed6-dc4b7671088f">
 
 Under the **settings** page, you need to insert those information:
 1. a valid **GitHub token** (link to [create one](https://github.com/settings/tokens)) <br>
@@ -49,8 +48,7 @@ Is just required **repo** scope (repo:status, repo_deployment, public_repo, repo
 
 ## 3️⃣ Enjoy the plugin
 
-<img src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/7770efc5-13db-4583-9e19-9657144b467a" width="100%">
-<!-- img src="https://github.com/GabAlpha/GitHobs/assets/3099816/31c1bd52-98b5-4782-bed4-c7b35a912d22" width="100%" -->
+<img width="100%" alt="githobs screen" src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/7770efc5-13db-4583-9e19-9657144b467a">
 
 Open and **edit your issue** directly from Obsidian:
 1. open the dedicated **sidebar**
