@@ -42,9 +42,7 @@ Under the **settings** page, you need to insert those information:
 1. a valid **GitHub token** (link to [create one](https://github.com/settings/tokens)) <br>
 Is just required **repo** scope (repo:status, repo_deployment, public_repo, repo:invite, security_events)
 
-🖼️ Screen Token set up
 <img width="50%" alt="Github Token" src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/7690b706-38d0-4ce0-b05f-6c10ce213db5">
-
 
 2. the **owner name** of the repository (es. _GabAlpha_)
 3. the **repository name** (es. _obsidian-githobs_)
