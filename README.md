@@ -13,21 +13,25 @@ Be friendly with:
 # How to use 🤷‍♂️
 
 ## 1️⃣ Install plugin 
-There are two way to get the plugin: 
-- install manually
-- from plugin store
+
+<img width="1136" alt="image" src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/38ce74a5-9dab-4c04-b079-a55a54116580">
+
+Browse Community plugins: 
+- open _Settings_
+- selct _Community plugins_
+- click _Browse_ and search **`githobs`**
+- _Install_ it and _Enable_ it 
+
+Find us on [Obsidian Plugins](https://obsidian.md/plugins?search=githobs). 
 
 ### 🤲 Manual installation
-- Download from the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/latest/): 
+Alternatively, you ca install manually:
+- download from the [releases page](https://github.com/GabAlpha/obsidian-githobs/releases/latest/): 
 	- **main.js** 
 	- **manifest.json**
     - **styles.css**  
-- In your Obsidian vaults **.obsidian/plugins/** folder, create **`githobs`** folder
-- Paste here those 3 files
-
-### 🏪 Browse Community plugins
-> [!NOTE]
-> Find us on [Obsidian Plugins](https://obsidian.md/plugins?search=githobs)
+- in your Obsidian vaults **.obsidian/plugins/** folder, create **`githobs`** folder
+- paste here those 3 files
 
 ## 2️⃣ Set up your plugin
 
@@ -38,11 +42,9 @@ Under the **settings** page, you need to insert those information:
 1. a valid **GitHub token** (link to [create one](https://github.com/settings/tokens)) <br>
 Is just required **repo** scope (repo:status, repo_deployment, public_repo, repo:invite, security_events)
 
-	<details>
-	<summary>🖼️ Screen Token set up</summary>
+🖼️ Screen Token set up
+<img width="50%" alt="Github Token" src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/7690b706-38d0-4ce0-b05f-6c10ce213db5">
 
-	<img width="100%" alt="Github Token" src="https://github.com/GabAlpha/obsidian-githobs/assets/3099816/7690b706-38d0-4ce0-b05f-6c10ce213db5">
-	</details>
 
 2. the **owner name** of the repository (es. _GabAlpha_)
 3. the **repository name** (es. _obsidian-githobs_)
