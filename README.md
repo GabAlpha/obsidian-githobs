@@ -26,10 +26,8 @@ There are two way to get the plugin:
 - Paste here those 3 files
 
 ### 🏪 Browse Community plugins
-> [!CAUTION]
-> **Available soon** <br>
-> _This plugin is in the Obsidian community plugin store. <br>
-You can find it by searching in the store: **`githobs`**_
+> [!NOTE]
+> Find us on [Obsidian Plugins](https://obsidian.md/plugins?search=githobs)
 
 ## 2️⃣ Set up your plugin
 
