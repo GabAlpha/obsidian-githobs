@@ -1,29 +1,33 @@
 import GitHobs from 'main';
 import { App, PluginSettingTab, Setting } from 'obsidian';
 
-export interface GitHobsSettings {
-	token: string;
+export type Repo = {
 	owner: string;
 	repo: string;
+};
+
+export interface GitHobsSettings {
+	token: string;
+	repos: Repo[];
 }
 
 export const DEFAULT_SETTINGS: GitHobsSettings = {
 	token: '',
-	owner: '',
-	repo: ''
+	repos: []
 };
 
-function createSetting(
+function createTextSetting(
 	plugin: GitHobs,
 	container: HTMLElement,
 	args: {
 		name: string;
 		description?: string | DocumentFragment;
 		placeholder?: string;
-		value: keyof GitHobsSettings;
+		value: string;
 	}
 ) {
-	const { name, description, placeholder, value } = args;
+	const { name, description, placeholder } = args;
+	let { value } = args;
 
 	new Setting(container)
 		.setName(name)
@@ -31,9 +35,9 @@ function createSetting(
 		.addText((text) =>
 			text
 				.setPlaceholder(placeholder ?? '')
-				.setValue(plugin.settings[value])
+				.setValue(value)
 				.onChange(async (val) => {
-					plugin.settings[value] = val;
+					value = val;
 					await plugin.saveSettings();
 				})
 		);
@@ -48,7 +52,8 @@ export class SettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		const { containerEl } = this;
+		const { containerEl, plugin } = this;
+		const settingsValues = plugin.settings;
 
 		containerEl.empty();
 
@@ -68,23 +73,45 @@ export class SettingTab extends PluginSettingTab {
 			return fragment;
 		};
 
-		createSetting(this.plugin, containerEl, {
+		// containerEl.createEl('h5', { text: 'Settings' });
+
+		createTextSetting(plugin, containerEl, {
 			name: 'Github Token',
-			description: createDescriptionWithLink(
-				{href: "https://github.com/settings/tokens/new", text: "Add the github token, alternately ", aText: 'create one'}
-			),
+			description: createDescriptionWithLink({
+				href: 'https://github.com/settings/tokens/new',
+				text: 'Add the github token, alternately ',
+				aText: 'create one'
+			}),
 			placeholder: 'Enter your secret',
-			value: 'token'
+			value: settingsValues.token
 		});
 
-		createSetting(this.plugin, containerEl, {
-			name: 'Owner repo',
-			value: 'owner'
+		const div = containerEl.createDiv({ cls: 'setting-item' });
+		const div1 = div.createDiv({ cls: 'setting-item-info' });
+		div1.createEl('strong', { text: 'Repos Manager' });
+		const div2 = div.createDiv({ cls: 'settings-item-control' });
+		const addRepoBtn = div2.createEl('button', { text: 'Add repo', cls: 'mod-cta' });
+		addRepoBtn.onclick = async () => {
+			// settingsValues.repos = [];
+			settingsValues.repos.push({ owner: '', repo: '' });
+			await plugin.saveSettings();
+			// reload
+			this.display();
+		};
+
+		settingsValues.repos.forEach((repo) => {
+			createTextSetting(plugin, containerEl, { name: 'Owner repo', value: repo.owner });
+			createTextSetting(plugin, containerEl, { name: 'Repo name', value: repo.repo });
 		});
 
-		createSetting(this.plugin, containerEl, {
-			name: 'Repo name',
-			value: 'repo'
-		});
+		// createSetting(this.plugin, containerEl, {
+		// 	name: 'Owner repo',
+		// 	value: 'owner'
+		// });
+
+		// createSetting(this.plugin, containerEl, {
+		// 	name: 'Repo name',
+		// 	value: 'repo'
+		// });
 	}
 }

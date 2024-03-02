@@ -70,7 +70,7 @@ export class GithubIssueControlsView extends ItemView {
 
 		const viewContainer = createContainer(rootElement);
 
-		if (!this.settings.repo || !this.settings.owner || !this.settings.token) {
+		if (!this.settings.token || this.settings.repos.length === 0) {
 			obContainer.empty();
 
 			createInfoSection(
@@ -99,8 +99,8 @@ export class GithubIssueControlsView extends ItemView {
 		createInfoSection(
 			viewContainer,
 			{
-				info: 'Issue Editor 🦤',
-				description: { text: 'Repo: ', textBold: this.settings.repo }
+				info: 'Issue Editor 🦤'
+				// description: { text: 'Repo: ', textBold: this.settings.repo }
 			},
 			true
 		);
