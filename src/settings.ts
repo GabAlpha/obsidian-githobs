@@ -39,6 +39,7 @@ function createTextSetting(
 				.onChange(async (val) => {
 					value = val;
 					await plugin.saveSettings();
+					console.log(plugin.settings);
 				})
 		);
 }
@@ -93,15 +94,22 @@ export class SettingTab extends PluginSettingTab {
 		const addRepoBtn = div2.createEl('button', { text: 'Add repo', cls: 'mod-cta' });
 		addRepoBtn.onclick = async () => {
 			// settingsValues.repos = [];
-			settingsValues.repos.push({ owner: '', repo: '' });
+			settingsValues.repos = [...settingsValues.repos, { owner: '', repo: '' }];
 			await plugin.saveSettings();
 			// reload
 			this.display();
 		};
 
-		settingsValues.repos.forEach((repo) => {
+		settingsValues.repos.forEach((repo, idx) => {
 			createTextSetting(plugin, containerEl, { name: 'Owner repo', value: repo.owner });
 			createTextSetting(plugin, containerEl, { name: 'Repo name', value: repo.repo });
+			const removeRepoBtn = containerEl.createEl('button', { text: 'canc' });
+			removeRepoBtn.onclick = async () => {
+				console.log(settingsValues.repos);
+				settingsValues.repos = settingsValues.repos.filter((_, sIdx) => sIdx !== idx);
+				await plugin.saveSettings();
+				this.display();
+			};
 		});
 
 		// createSetting(this.plugin, containerEl, {
