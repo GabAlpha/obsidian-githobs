@@ -13,7 +13,7 @@ async function updateFile(
 ) {
 	try {
 		const propertiesWithGithubIssue = PropertiesHelper.writeIssueId(
-			externalData ?? file.data,
+			file.data + externalData ?? '',
 			res.json.number
 		);
 
@@ -26,13 +26,9 @@ async function updateFile(
 			);
 		}
 
-		await this.app.vault.modify(
-			file.file,
-			`${propertiesWithGithubIssue}\n${PropertiesHelper.removeProperties(
-				externalData ?? file.data
-			)}`,
-			{ mtime: new Date(res.json.updated_at).getTime() }
-		);
+		await this.app.vault.modify(file.file, file.data + externalData, {
+			mtime: new Date(res.json.updated_at).getTime()
+		});
 	} catch {
 		throw new Error('This issue is already tracked');
 	}
