@@ -12,6 +12,7 @@ text: "this is text" (text type)
 */
 
 const GITHUB_ISSUE_PROPERTY_CODE = 'github_issue';
+export const GITHUB_ISSUE_PROPERTY_ORIGINAL_TITLE = 'github_issue_original_title';
 const PROPERTIES_DELIMITER = '---';
 
 export function readProperties(data: string): {
@@ -64,12 +65,31 @@ export function writeIssueId(data: string, issueId: string) {
 			? [...properties.filter((p) => !p.includes(GITHUB_ISSUE_PROPERTY_CODE))]
 			: []),
 		`${GITHUB_ISSUE_PROPERTY_CODE}: ${issueId}`,
-		PROPERTIES_DELIMITER
+		`${PROPERTIES_DELIMITER}\n`
+	].join('\n');
+}
+
+export function writeIssueOriginalTitle(data: string, originalTitle: string) {
+	const { properties } = readProperties(data);
+	if (!properties)
+		return [
+			PROPERTIES_DELIMITER,
+			`${GITHUB_ISSUE_PROPERTY_ORIGINAL_TITLE}: ${originalTitle}`,
+			`${PROPERTIES_DELIMITER}\n`
+		].join('\n');
+
+	return [
+		PROPERTIES_DELIMITER,
+		...(properties
+			? [...properties.filter((p) => !p.includes(GITHUB_ISSUE_PROPERTY_ORIGINAL_TITLE))]
+			: []),
+		`${GITHUB_ISSUE_PROPERTY_ORIGINAL_TITLE}: '${originalTitle}'`,
+		`${PROPERTIES_DELIMITER}\n`
 	].join('\n');
 }
 
 export function extractFilePropertiesString(data: string) {
 	const { properties } = readProperties(data);
 	if (!properties) return '';
-	return [PROPERTIES_DELIMITER, ...properties, PROPERTIES_DELIMITER].join('\n');
+	return [PROPERTIES_DELIMITER, ...properties, `${PROPERTIES_DELIMITER}\n`].join('\n');
 }
