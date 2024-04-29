@@ -12,8 +12,9 @@ async function updateFile(
 	title?: string
 ) {
 	try {
+		const filePropertiesString = PropertiesHelper.extractFilePropertiesString(file.data);
 		const propertiesWithGithubIssue = PropertiesHelper.writeIssueId(
-			file.data + externalData ?? '',
+			filePropertiesString + externalData ?? '',
 			res.json.number
 		);
 

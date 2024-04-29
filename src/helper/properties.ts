@@ -67,3 +67,9 @@ export function writeIssueId(data: string, issueId: string) {
 		PROPERTIES_DELIMITER
 	].join('\n');
 }
+
+export function extractFilePropertiesString(data: string) {
+	const { properties } = readProperties(data);
+	if (!properties) return '';
+	return [PROPERTIES_DELIMITER, ...properties, PROPERTIES_DELIMITER].join('\n');
+}
