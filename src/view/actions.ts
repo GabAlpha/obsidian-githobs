@@ -32,9 +32,16 @@ async function updateFile(
 			);
 		}
 
-		await this.app.vault.process(file.file, (data: string) => propertiesWithGithubIssue, {
-			mtime: new Date(res.json.updated_at).getTime()
-		});
+		await this.app.vault.process(
+			file.file,
+			(data: string) =>
+				`${propertiesWithGithubIssue}\n${PropertiesHelper.removeProperties(
+					externalData ?? data
+				)}`,
+			{
+				mtime: new Date(res.json.updated_at).getTime()
+			}
+		);
 	} catch {
 		throw new Error('This issue is already tracked');
 	}
