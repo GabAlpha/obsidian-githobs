@@ -18,15 +18,20 @@ async function updateFile(
 		);
 
 		if (title) {
+			const vaultSafeTitle = title
+				.replace(':', ' - ')
+				.replace('|', ' -- ')
+				.replace('/', '_')
+				.replace('\\', '~');
 			await this.app.vault.rename(
 				file.file,
 				file.file?.parent?.path === '/'
-					? `${title}.md`
-					: `${file.file?.parent?.path}/${title}.md`
+					? `${vaultSafeTitle}.md`
+					: `${file.file?.parent?.path}/${vaultSafeTitle}.md`
 			);
 		}
 
-		await this.app.vault.modify(file.file, file.data + externalData, {
+		await this.app.vault.process(file.file, (data: string) => propertiesWithGithubIssue, {
 			mtime: new Date(res.json.updated_at).getTime()
 		});
 	} catch {
