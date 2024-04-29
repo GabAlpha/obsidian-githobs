@@ -46,7 +46,7 @@ async function updateFile(
 		await this.app.vault.process(
 			file.file,
 			(data: string) =>
-				`${propertiesWithGithubIssueData}\n${PropertiesHelper.removeProperties(
+				`${propertiesWithGithubIssueData}${PropertiesHelper.removeProperties(
 					externalData ?? data
 				)}`,
 			{
