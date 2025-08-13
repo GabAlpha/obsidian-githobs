@@ -1,33 +1,44 @@
-import { MarkdownFile } from 'types';
 import * as Api from '../api';
 import * as PropertiesHelper from '../helper/properties';
 import { GitHobsSettings } from 'settings';
-import { Notice, RequestUrlResponse, TFile } from 'obsidian';
+import { Notice, TFile } from 'obsidian';
 import { GitHubIssueStatus } from 'view';
 
 async function updateFile(
-	file: MarkdownFile,
-	res: RequestUrlResponse | undefined,
-	externalData?: string,
-	title?: string
+	file: TFile,
+	res: { json: { title: string; body: string; number: string; updated_at: string } } | undefined
 ) {
-	if (title) {
+	if (res?.json.title) {
 		await this.app.vault.rename(
-			file.file,
-			file.file?.parent?.path === '/'
-				? `${title}.md`
-				: `${file.file?.parent?.path}/${title}.md`
+			file,
+			file?.parent?.path === '/'
+				? `${res?.json.title}.md`
+				: `${file?.parent?.path}/${res?.json.title}.md`
 		);
 	}
 
 	if (res) {
-		const fullFile = await PropertiesHelper.writeProperty(
-			{ ...file, data: externalData ?? file.data },
+		const contentOfFile = await this.app.vault.read(file);
+		const { properties } = PropertiesHelper.readProperties(contentOfFile);
+
+		const formattedProperties = (
+			properties
+				? [
+						PropertiesHelper.PROPERTIES_DELIMITER,
+						...properties,
+						PropertiesHelper.PROPERTIES_DELIMITER
+				  ]
+				: []
+		).join('\n');
+
+		const propertiesWithGithubIssueNumber = await PropertiesHelper.writeProperty(
+			formattedProperties,
+			file,
 			PropertiesHelper.PROPERTIES.issue,
 			res.json.number
 		);
 
-		await this.app.vault.modify(file.file, fullFile, {
+		await this.app.vault.modify(file, `${propertiesWithGithubIssueNumber}${res.json.body}`, {
 			mtime: new Date(res.json.updated_at).getTime()
 		});
 	}
@@ -35,17 +46,19 @@ async function updateFile(
 
 export async function pushIssue(
 	issueId: string | undefined,
-	file: MarkdownFile,
+	file: TFile,
 	settings: GitHobsSettings,
 	selectedRepo: string
 ) {
+	const contentOfFile = await this.app.vault.read(file);
+
 	if (issueId) {
 		const res = await Api.updateIssue(
 			settings,
 			issueId,
 			{
-				title: file.file?.basename ?? '',
-				body: PropertiesHelper.removeProperties(file.data)
+				title: file?.basename ?? '',
+				body: PropertiesHelper.removeProperties(contentOfFile)
 			},
 			selectedRepo
 		);
@@ -59,8 +72,8 @@ export async function pushIssue(
 	const res = await Api.createIssue(
 		settings,
 		{
-			title: file.file?.basename ?? '',
-			body: PropertiesHelper.removeProperties(file.data)
+			title: file?.basename ?? '',
+			body: PropertiesHelper.removeProperties(contentOfFile)
 		},
 		selectedRepo
 	);
@@ -96,17 +109,17 @@ export async function fetchIssue(
 
 export async function pullIssue(
 	issueId: string,
-	file: MarkdownFile,
+	file: TFile,
 	settings: GitHobsSettings,
 	selectedRepo: string
 ) {
 	const res = await Api.getIssue(settings, issueId, selectedRepo);
-	await updateFile(file, res, res?.json.body, res?.json.title);
+	await updateFile(file, res);
 }
 
 export async function changeIssueId(
 	issueId: string,
-	file: MarkdownFile,
+	file: TFile,
 	settings: GitHobsSettings,
 	selectedRepo: string
 ) {

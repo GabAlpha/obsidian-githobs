@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ItemView, MarkdownView, Notice, WorkspaceLeaf, setIcon } from 'obsidian';
 import { GitHobsSettings } from 'settings';
-import { MarkdownFile } from 'types';
 import * as PropertiesHelper from '../helper/properties';
 import { changeIssueId, fetchIssue, pullIssue, pushIssue } from 'view/actions';
 
@@ -72,22 +71,15 @@ export class GithubIssueControlsView extends ItemView {
 			return;
 		}
 
-		const fileOpened = {
-			data: await this.app.vault.read(activeFile),
-			file: activeFile
-		} as MarkdownFile;
-
-		if (!fileOpened) {
-			obContainer.empty();
-			return;
-		}
-
 		const rootElement = document.createElement('div');
+
+		const contentOfFile = await this.app.vault.read(activeFile);
+
 		this.setIssueId(
-			PropertiesHelper.readProperty(fileOpened?.data, PropertiesHelper.PROPERTIES.issue)
+			PropertiesHelper.readProperty(contentOfFile, PropertiesHelper.PROPERTIES.issue)
 		);
 		this.setSelectedRepo(
-			PropertiesHelper.readProperty(fileOpened?.data, PropertiesHelper.PROPERTIES.repo)
+			PropertiesHelper.readProperty(contentOfFile, PropertiesHelper.PROPERTIES.repo)
 		);
 
 		const viewContainer = createContainer(rootElement);
@@ -135,8 +127,11 @@ export class GithubIssueControlsView extends ItemView {
 				})),
 				onChange: async (val) => {
 					this.setSelectedRepo(val);
+					const contentOfFile = await this.app.vault.read(activeFile);
+
 					await PropertiesHelper.writeProperty(
-						fileOpened,
+						contentOfFile,
+						activeFile,
 						PropertiesHelper.PROPERTIES.repo,
 						val
 					);
@@ -161,7 +156,7 @@ export class GithubIssueControlsView extends ItemView {
 
 					return await changeIssueId(
 						this.issueId,
-						fileOpened,
+						activeFile,
 						this.settings,
 						this.selectedRepo
 					);
@@ -180,14 +175,14 @@ export class GithubIssueControlsView extends ItemView {
 			button: {
 				icon: 'refresh-ccw',
 				action: async () => {
-					if (!this.issueId || !fileOpened.file || !this.selectedRepo) {
+					if (!this.issueId || !this.selectedRepo) {
 						return;
 					}
 
 					const fetchedIssue = await fetchIssue(
 						this.issueId,
 						this.settings,
-						fileOpened.file,
+						activeFile,
 						this.selectedRepo
 					);
 					this.setFetchDate(fetchedIssue.date);
@@ -211,7 +206,7 @@ export class GithubIssueControlsView extends ItemView {
 						return;
 					}
 
-					await pushIssue(this.issueId, fileOpened, this.settings, this.selectedRepo);
+					await pushIssue(this.issueId, activeFile, this.settings, this.selectedRepo);
 					this.status = undefined;
 					this.reload(editor);
 				}
@@ -235,7 +230,7 @@ export class GithubIssueControlsView extends ItemView {
 
 						await pullIssue(
 							this.issueId!,
-							fileOpened,
+							activeFile,
 							this.settings,
 							this.selectedRepo
 						);

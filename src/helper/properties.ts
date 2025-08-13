@@ -11,13 +11,13 @@ text: "this is text" (text type)
 ---
 */
 
-import { MarkdownFile } from 'types';
+import { TFile } from 'obsidian';
 
 export const PROPERTIES = {
 	issue: 'github_issue',
 	repo: 'github_repo'
 };
-const PROPERTIES_DELIMITER = '---';
+export const PROPERTIES_DELIMITER = '---';
 
 export function readProperties(data: string): {
 	properties: string[] | undefined;
@@ -65,8 +65,8 @@ export function readProperty(data: string, key: string) {
 	return value;
 }
 
-export async function writeProperty(file: MarkdownFile, key: string, value: string) {
-	const { properties } = readProperties(file.data);
+export async function writeProperty(data: string, file: TFile, key: string, value: string) {
+	const { properties } = readProperties(data);
 
 	const newProperties = [
 		PROPERTIES_DELIMITER,
@@ -75,9 +75,9 @@ export async function writeProperty(file: MarkdownFile, key: string, value: stri
 		PROPERTIES_DELIMITER
 	].join('\n');
 
-	const fullFile = `${newProperties}\n${removeProperties(file.data)}`;
+	const fullFile = `${newProperties}\n${removeProperties(data)}`;
 
-	await this.app.vault.modify(file.file, fullFile);
+	await this.app.vault.modify(file, fullFile);
 
 	return fullFile;
 }
