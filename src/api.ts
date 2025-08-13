@@ -58,6 +58,7 @@ export async function getIssue(settings: GitHobsSettings, issueId: string, selec
 	const repo = settings.repos.find((r) => r.code === selectedRepo);
 
 	if (!repo) {
+		new Notice('Select repo!');
 		return;
 	}
 

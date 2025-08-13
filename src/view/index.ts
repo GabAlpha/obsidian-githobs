@@ -127,7 +127,7 @@ export class GithubIssueControlsView extends ItemView {
 		);
 
 		createSection(viewContainer, {
-			info: 'test',
+			info: 'Repo',
 			dropdown: {
 				items: this.settings.repos.map((r) => ({
 					text: r.repo,
@@ -135,7 +135,7 @@ export class GithubIssueControlsView extends ItemView {
 				})),
 				onChange: async (val) => {
 					this.setSelectedRepo(val);
-					PropertiesHelper.writeProperty(
+					await PropertiesHelper.writeProperty(
 						fileOpened,
 						PropertiesHelper.PROPERTIES.repo,
 						val
