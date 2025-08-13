@@ -118,13 +118,16 @@ export class GithubIssueControlsView extends ItemView {
 			true
 		);
 
+		console.log(this.selectedRepo);
+
 		createSection(viewContainer, {
 			info: 'Repo',
 			dropdown: {
-				items: this.settings.repos.map((r) => ({
+				items: [{ repo: '', code: '' }, ...this.settings.repos].map((r) => ({
 					text: r.repo,
 					value: r.code
 				})),
+				value: this.selectedRepo,
 				onChange: async (val) => {
 					this.setSelectedRepo(val);
 					const contentOfFile = await this.app.vault.read(activeFile);
@@ -266,6 +269,7 @@ function createSection(
 		dropdown?: {
 			items: { text: string; value: string }[];
 			onChange: (val: string) => Promise<void>;
+			value: string | undefined;
 		};
 		input?: { type: string; value: string; onChange: (val: string) => Promise<void> };
 	},
@@ -317,6 +321,7 @@ function createSection(
 			select.onchange = (val: any) => {
 				dropdown.onChange(val.target.value);
 			};
+			select.value = dropdown.value ?? '';
 		}
 
 		if (button) {
