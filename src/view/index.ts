@@ -3,6 +3,7 @@
 import { ItemView, MarkdownView, Notice, WorkspaceLeaf, setIcon } from 'obsidian';
 import { GitHobsSettings } from 'settings';
 import * as PropertiesHelper from '../helper/properties';
+import * as TitleHelper from '../helper/title';
 import { changeIssueId, fetchIssue, pullIssue, pushIssue } from 'view/actions';
 
 export const GithubIssueControlsViewType = 'github-issue-controls-view';
@@ -113,12 +114,14 @@ export class GithubIssueControlsView extends ItemView {
 		createSection(
 			viewContainer,
 			{
-				info: 'Issue Editor 🦤'
+				info: 'Issue Editor 🦤',
+				description: {
+					text: 'Original: ',
+					textBold: TitleHelper.sanitize(activeFile.basename)
+				}
 			},
 			true
 		);
-
-		console.log(this.selectedRepo);
 
 		createSection(viewContainer, {
 			info: 'Repo',
