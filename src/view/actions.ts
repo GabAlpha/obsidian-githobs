@@ -1,5 +1,6 @@
 import * as Api from '../api';
 import * as PropertiesHelper from '../helper/properties';
+import * as TitleHelper from '../helper/title';
 import { GitHobsSettings } from 'settings';
 import { Notice, TFile } from 'obsidian';
 import { GitHubIssueStatus } from 'view';
@@ -9,11 +10,10 @@ async function updateFile(
 	res: { json: { title: string; body: string; number: string; updated_at: string } } | undefined
 ) {
 	if (res?.json.title) {
+		const title = TitleHelper.sanitize(res?.json.title);
 		await this.app.vault.rename(
 			file,
-			file?.parent?.path === '/'
-				? `${res?.json.title}.md`
-				: `${file?.parent?.path}/${res?.json.title}.md`
+			file?.parent?.path === '/' ? `${title}.md` : `${file?.parent?.path}/${title}.md`
 		);
 	}
 
@@ -51,13 +51,14 @@ export async function pushIssue(
 	selectedRepo: string
 ) {
 	const contentOfFile = await this.app.vault.read(file);
+	const title = TitleHelper.sanitize(file.basename);
 
 	if (issueId) {
 		const res = await Api.updateIssue(
 			settings,
 			issueId,
 			{
-				title: file?.basename ?? '',
+				title: title,
 				body: PropertiesHelper.removeProperties(contentOfFile)
 			},
 			selectedRepo
@@ -72,7 +73,7 @@ export async function pushIssue(
 	const res = await Api.createIssue(
 		settings,
 		{
-			title: file?.basename ?? '',
+			title: title,
 			body: PropertiesHelper.removeProperties(contentOfFile)
 		},
 		selectedRepo
