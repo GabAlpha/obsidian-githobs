@@ -91,7 +91,7 @@ export class SettingTab extends PluginSettingTab {
 		const div1 = div.createDiv({ cls: 'setting-item-info' });
 		div1.createEl('strong', { text: 'Repos Manager' });
 		const div2 = div.createDiv({ cls: 'settings-item-control' });
-		const addRepoBtn = div2.createEl('button', { text: 'Add repo', cls: 'mod-cta' });
+		const addRepoBtn = div2.createEl('button', { text: 'Add', cls: 'mod-cta' });
 
 		addRepoBtn.onclick = async () => {
 			settingsValues.repos = [...settingsValues.repos, { owner: '', repo: '', code: '' }];
@@ -102,7 +102,7 @@ export class SettingTab extends PluginSettingTab {
 
 		settingsValues.repos.forEach((repo, idx) => {
 			createFormSetting(plugin, containerEl, {
-				name: 'Owner repo',
+				name: 'Owner',
 				value: repo.owner,
 				onChange: (val) => {
 					plugin.settings.repos[idx].owner = val.trim();
@@ -110,7 +110,7 @@ export class SettingTab extends PluginSettingTab {
 			});
 
 			createFormSetting(plugin, containerEl, {
-				name: 'Repo name',
+				name: 'Repo',
 				value: repo.repo,
 				onChange: (val) => {
 					plugin.settings.repos[idx].repo = val.trim();
@@ -118,7 +118,12 @@ export class SettingTab extends PluginSettingTab {
 				}
 			});
 
-			const removeRepoBtn = containerEl.createEl('button', { text: 'canc' });
+			const containerRemoveBtn = containerEl.createEl('div', { cls: 'setting-item' });
+
+			const removeRepoBtn = containerRemoveBtn.createEl('button', {
+				text: 'Remove',
+				cls: ['mod-warning', 'githobs-delete-repo-btn']
+			});
 
 			removeRepoBtn.onclick = async () => {
 				settingsValues.repos = settingsValues.repos.filter((_, sIdx) => sIdx !== idx);
