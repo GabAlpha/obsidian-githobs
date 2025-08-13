@@ -16,7 +16,7 @@ export const DEFAULT_SETTINGS: GitHobsSettings = {
 	repos: []
 };
 
-function createTextSetting(
+function createFormSetting(
 	plugin: GitHobs,
 	container: HTMLElement,
 	args: {
@@ -24,10 +24,11 @@ function createTextSetting(
 		description?: string | DocumentFragment;
 		placeholder?: string;
 		value: string;
+		onChange: (val: string) => void;
 	}
 ) {
 	const { name, description, placeholder } = args;
-	let { value } = args;
+	let { value, onChange } = args;
 
 	new Setting(container)
 		.setName(name)
@@ -37,9 +38,8 @@ function createTextSetting(
 				.setPlaceholder(placeholder ?? '')
 				.setValue(value)
 				.onChange(async (val) => {
-					value = val;
+					onChange(val);
 					await plugin.saveSettings();
-					console.log(plugin.settings);
 				})
 		);
 }
@@ -74,9 +74,7 @@ export class SettingTab extends PluginSettingTab {
 			return fragment;
 		};
 
-		// containerEl.createEl('h5', { text: 'Settings' });
-
-		createTextSetting(plugin, containerEl, {
+		createFormSetting(plugin, containerEl, {
 			name: 'Github Token',
 			description: createDescriptionWithLink({
 				href: 'https://github.com/settings/tokens/new',
@@ -84,7 +82,8 @@ export class SettingTab extends PluginSettingTab {
 				aText: 'create one'
 			}),
 			placeholder: 'Enter your secret',
-			value: settingsValues.token
+			value: settingsValues.token,
+			onChange: (val) => (plugin.settings.token = val)
 		});
 
 		const div = containerEl.createDiv({ cls: 'setting-item' });
@@ -92,8 +91,8 @@ export class SettingTab extends PluginSettingTab {
 		div1.createEl('strong', { text: 'Repos Manager' });
 		const div2 = div.createDiv({ cls: 'settings-item-control' });
 		const addRepoBtn = div2.createEl('button', { text: 'Add repo', cls: 'mod-cta' });
+
 		addRepoBtn.onclick = async () => {
-			// settingsValues.repos = [];
 			settingsValues.repos = [...settingsValues.repos, { owner: '', repo: '' }];
 			await plugin.saveSettings();
 			// reload
@@ -101,9 +100,20 @@ export class SettingTab extends PluginSettingTab {
 		};
 
 		settingsValues.repos.forEach((repo, idx) => {
-			createTextSetting(plugin, containerEl, { name: 'Owner repo', value: repo.owner });
-			createTextSetting(plugin, containerEl, { name: 'Repo name', value: repo.repo });
+			createFormSetting(plugin, containerEl, {
+				name: 'Owner repo',
+				value: repo.owner,
+				onChange: (val) => (plugin.settings.repos[idx].owner = val)
+			});
+
+			createFormSetting(plugin, containerEl, {
+				name: 'Repo name',
+				value: repo.repo,
+				onChange: (val) => (plugin.settings.repos[idx].repo = val)
+			});
+
 			const removeRepoBtn = containerEl.createEl('button', { text: 'canc' });
+
 			removeRepoBtn.onclick = async () => {
 				console.log(settingsValues.repos);
 				settingsValues.repos = settingsValues.repos.filter((_, sIdx) => sIdx !== idx);
@@ -111,15 +121,5 @@ export class SettingTab extends PluginSettingTab {
 				this.display();
 			};
 		});
-
-		// createSetting(this.plugin, containerEl, {
-		// 	name: 'Owner repo',
-		// 	value: 'owner'
-		// });
-
-		// createSetting(this.plugin, containerEl, {
-		// 	name: 'Repo name',
-		// 	value: 'repo'
-		// });
 	}
 }

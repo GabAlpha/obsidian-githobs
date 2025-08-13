@@ -18,6 +18,10 @@ export function readProperties(data: string): {
 	properties: string[] | undefined;
 	indexEndPropertiesLine: number | undefined;
 } {
+	if (!data) {
+		return { properties: undefined, indexEndPropertiesLine: undefined };
+	}
+
 	const [firstLine, ...restOfLines] = data.split('\n');
 	// Check if exist the property start syntax
 	if (firstLine !== PROPERTIES_DELIMITER) {

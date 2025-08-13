@@ -65,6 +65,8 @@ export class GithubIssueControlsView extends ItemView {
 			return;
 		}
 
+		console.log(fileOpened.data, editor);
+
 		const rootElement = document.createElement('div');
 		this.setIssueId(PropertiesHelper.readIssueId(fileOpened.data));
 
@@ -73,7 +75,7 @@ export class GithubIssueControlsView extends ItemView {
 		if (!this.settings.token || this.settings.repos.length === 0) {
 			obContainer.empty();
 
-			createInfoSection(
+			createSection(
 				viewContainer,
 				{
 					info: 'Missing settings! 🚨',
@@ -82,7 +84,7 @@ export class GithubIssueControlsView extends ItemView {
 				true
 			);
 
-			createInfoSection(viewContainer, {
+			createSection(viewContainer, {
 				info: 'Reload',
 				button: {
 					icon: 'refresh-ccw',
@@ -96,16 +98,25 @@ export class GithubIssueControlsView extends ItemView {
 			return;
 		}
 
-		createInfoSection(
+		createSection(
 			viewContainer,
 			{
 				info: 'Issue Editor 🦤'
-				// description: { text: 'Repo: ', textBold: this.settings.repo }
 			},
 			true
 		);
 
-		createInfoSection(viewContainer, {
+		createSection(viewContainer, {
+			info: 'test',
+			dropdown: {
+				items: this.settings.repos.map((r) => ({
+					text: r.repo,
+					value: `${r.owner}|${r.repo}`
+				}))
+			}
+		});
+
+		createSection(viewContainer, {
 			info: 'Issue number:',
 			button: {
 				icon: 'crosshair',
@@ -124,7 +135,7 @@ export class GithubIssueControlsView extends ItemView {
 			}
 		});
 
-		createInfoSection(viewContainer, {
+		createSection(viewContainer, {
 			info: 'Fetch',
 			description: { text: this.issueId ? this.fetchDate : 'First push' },
 			button: {
@@ -146,7 +157,7 @@ export class GithubIssueControlsView extends ItemView {
 			}
 		});
 
-		createInfoSection(viewContainer, {
+		createSection(viewContainer, {
 			info: 'Push',
 			description:
 				this.status === GitHubIssueStatus.CanPush
@@ -163,7 +174,7 @@ export class GithubIssueControlsView extends ItemView {
 		});
 
 		if (this.issueId) {
-			createInfoSection(viewContainer, {
+			createSection(viewContainer, {
 				info: 'Pull',
 				description:
 					this.status === GitHubIssueStatus.CanPull
@@ -190,7 +201,7 @@ function createContainer(rootEl: HTMLDivElement) {
 	return c;
 }
 
-function createInfoSection(
+function createSection(
 	containerToAppend: HTMLDivElement,
 	{
 		info,
@@ -238,7 +249,6 @@ function createInfoSection(
 			const inputEl = settingControl.createEl('input', { cls: 'githobs-input' });
 			inputEl.setAttribute('type', input.type);
 			inputEl.setAttribute('value', input.value);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			inputEl.onchange = (val: any) => {
 				input.onChange(val.target.value);
 			};
