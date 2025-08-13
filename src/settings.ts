@@ -29,7 +29,7 @@ function createFormSetting(
 	}
 ) {
 	const { name, description, placeholder } = args;
-	let { value, onChange } = args;
+	const { value, onChange } = args;
 
 	new Setting(container)
 		.setName(name)
@@ -105,7 +105,7 @@ export class SettingTab extends PluginSettingTab {
 				name: 'Owner repo',
 				value: repo.owner,
 				onChange: (val) => {
-					plugin.settings.repos[idx].owner = val;
+					plugin.settings.repos[idx].owner = val.trim();
 				}
 			});
 
@@ -113,7 +113,7 @@ export class SettingTab extends PluginSettingTab {
 				name: 'Repo name',
 				value: repo.repo,
 				onChange: (val) => {
-					plugin.settings.repos[idx].repo = val;
+					plugin.settings.repos[idx].repo = val.trim();
 					plugin.settings.repos[idx].code = `${plugin.settings.repos[idx].owner}|${val}`;
 				}
 			});
@@ -121,7 +121,6 @@ export class SettingTab extends PluginSettingTab {
 			const removeRepoBtn = containerEl.createEl('button', { text: 'canc' });
 
 			removeRepoBtn.onclick = async () => {
-				console.log(settingsValues.repos);
 				settingsValues.repos = settingsValues.repos.filter((_, sIdx) => sIdx !== idx);
 				await plugin.saveSettings();
 				this.display();

@@ -11,7 +11,12 @@ text: "this is text" (text type)
 ---
 */
 
-const GITHUB_ISSUE_PROPERTY_CODE = 'github_issue';
+import { MarkdownFile } from 'types';
+
+export const PROPERTIES = {
+	issue: 'github_issue',
+	repo: 'github_repo'
+};
 const PROPERTIES_DELIMITER = '---';
 
 export function readProperties(data: string): {
@@ -42,32 +47,37 @@ export function readProperties(data: string): {
 
 export function removeProperties(data: string) {
 	const { indexEndPropertiesLine } = readProperties(data);
+
 	if (!indexEndPropertiesLine) return data;
 
 	const dataSplitted = data.split('\n');
 	return dataSplitted.slice(indexEndPropertiesLine + 1).join('\n');
 }
 
-export function readIssueId(data: string) {
+export function readProperty(data: string, key: string) {
 	const { properties } = readProperties(data);
 	if (!properties) return;
 
-	const githubIssueProperty = properties.find((p) => p.startsWith(GITHUB_ISSUE_PROPERTY_CODE));
+	const githubIssueProperty = properties.find((p) => p.startsWith(key));
 	if (!githubIssueProperty) return;
 
-	const [, issueId] = githubIssueProperty.split(':');
-	return issueId;
+	const [, value] = githubIssueProperty.split(': ');
+	return value;
 }
 
-export function writeIssueId(data: string, issueId: string) {
-	const { properties } = readProperties(data);
+export async function writeProperty(file: MarkdownFile, key: string, value: string) {
+	const { properties } = readProperties(file.data);
 
-	return [
+	const newProperties = [
 		PROPERTIES_DELIMITER,
-		...(properties
-			? [...properties.filter((p) => !p.includes(GITHUB_ISSUE_PROPERTY_CODE))]
-			: []),
-		`${GITHUB_ISSUE_PROPERTY_CODE}: ${issueId}`,
+		...(properties ? [...properties.filter((p) => !p.includes(key))] : []),
+		`${key}: ${value}`,
 		PROPERTIES_DELIMITER
 	].join('\n');
+
+	const fullFile = `${newProperties}\n${removeProperties(file.data)}`;
+
+	await this.app.vault.modify(file.file, fullFile);
+
+	return fullFile;
 }

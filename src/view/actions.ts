@@ -11,34 +11,25 @@ async function updateFile(
 	externalData?: string,
 	title?: string
 ) {
-	if (!res) {
-		return;
+	if (title) {
+		await this.app.vault.rename(
+			file.file,
+			file.file?.parent?.path === '/'
+				? `${title}.md`
+				: `${file.file?.parent?.path}/${title}.md`
+		);
 	}
 
-	try {
-		const propertiesWithGithubIssue = PropertiesHelper.writeIssueId(
-			externalData ?? file.data,
+	if (res) {
+		const fullFile = await PropertiesHelper.writeProperty(
+			{ ...file, data: externalData ?? file.data },
+			PropertiesHelper.PROPERTIES.issue,
 			res.json.number
 		);
 
-		if (title) {
-			await this.app.vault.rename(
-				file.file,
-				file.file?.parent?.path === '/'
-					? `${title}.md`
-					: `${file.file?.parent?.path}/${title}.md`
-			);
-		}
-
-		await this.app.vault.modify(
-			file.file,
-			`${propertiesWithGithubIssue}\n${PropertiesHelper.removeProperties(
-				externalData ?? file.data
-			)}`,
-			{ mtime: new Date(res.json.updated_at).getTime() }
-		);
-	} catch {
-		throw new Error('This issue is already tracked');
+		await this.app.vault.modify(file.file, fullFile, {
+			mtime: new Date(res.json.updated_at).getTime()
+		});
 	}
 }
 

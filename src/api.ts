@@ -9,6 +9,7 @@ export async function createIssue(
 	const repo = settings.repos.find((r) => r.code === selectedRepo);
 
 	if (!repo) {
+		new Notice('Select repo!');
 		return;
 	}
 
@@ -35,6 +36,7 @@ export async function updateIssue(
 	const repo = settings.repos.find((r) => r.code === selectedRepo);
 
 	if (!repo) {
+		new Notice('Select repo!');
 		return;
 	}
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ItemView, MarkdownView, Notice, WorkspaceLeaf, setIcon } from 'obsidian';
 import { GitHobsSettings } from 'settings';
@@ -82,7 +83,12 @@ export class GithubIssueControlsView extends ItemView {
 		}
 
 		const rootElement = document.createElement('div');
-		this.setIssueId(PropertiesHelper.readIssueId(fileOpened?.data));
+		this.setIssueId(
+			PropertiesHelper.readProperty(fileOpened?.data, PropertiesHelper.PROPERTIES.issue)
+		);
+		this.setSelectedRepo(
+			PropertiesHelper.readProperty(fileOpened?.data, PropertiesHelper.PROPERTIES.repo)
+		);
 
 		const viewContainer = createContainer(rootElement);
 
@@ -129,6 +135,11 @@ export class GithubIssueControlsView extends ItemView {
 				})),
 				onChange: async (val) => {
 					this.setSelectedRepo(val);
+					PropertiesHelper.writeProperty(
+						fileOpened,
+						PropertiesHelper.PROPERTIES.repo,
+						val
+					);
 				}
 			}
 		});
@@ -297,7 +308,7 @@ function createSection(
 			inputEl.setAttribute('type', input.type);
 			inputEl.setAttribute('value', input.value);
 			inputEl.onchange = (val: any) => {
-				input.onChange(val.target.value);
+				input.onChange(val.target?.value);
 			};
 		}
 
@@ -308,6 +319,9 @@ function createSection(
 				const o = select.createEl('option', { text: i.text });
 				o.setAttribute('value', i.value);
 			});
+			select.onchange = (val: any) => {
+				dropdown.onChange(val.target.value);
+			};
 		}
 
 		if (button) {
