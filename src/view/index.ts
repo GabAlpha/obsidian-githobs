@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ItemView, MarkdownView, Notice, WorkspaceLeaf, setIcon } from 'obsidian';
 import { GitHobsSettings } from 'settings';
-import { MarkdownFile } from 'types';
 import * as PropertiesHelper from '../helper/properties';
+import * as TitleHelper from '../helper/title';
 import { changeIssueId, fetchIssue, pullIssue, pushIssue } from 'view/actions';
 
 export const GithubIssueControlsViewType = 'github-issue-controls-view';
@@ -16,6 +17,7 @@ export class GithubIssueControlsView extends ItemView {
 	fetchDate: string | undefined;
 	status: GitHubIssueStatus | undefined;
 	issueId: string | undefined;
+	selectedRepo: string | undefined;
 
 	constructor(leaf: WorkspaceLeaf, settings: GitHobsSettings) {
 		super(leaf);
@@ -39,6 +41,7 @@ export class GithubIssueControlsView extends ItemView {
 		this.fetchDate = undefined;
 		this.status = undefined;
 		this.issueId = undefined;
+		this.selectedRepo = undefined;
 		this.draw();
 	}
 
@@ -50,39 +53,51 @@ export class GithubIssueControlsView extends ItemView {
 		this.issueId = issueId;
 	}
 
+	public setSelectedRepo(selectedRepo: string | undefined) {
+		this.selectedRepo = selectedRepo;
+	}
+
 	public reload(editor: MarkdownView | null) {
 		editor?.editor.focus();
 		this.draw();
 	}
 
-	private readonly draw = (): void => {
+	private readonly draw = async () => {
 		const obContainer = this.containerEl.children[1];
-		const fileOpened = this.leaf.view.app.workspace.activeEditor as MarkdownFile | null;
+		const activeFile = this.app.workspace.getActiveFile();
 		const editor = this.leaf.view.app.workspace.getActiveViewOfType(MarkdownView);
 
-		if (!fileOpened) {
+		if (!activeFile) {
 			obContainer.empty();
 			return;
 		}
 
 		const rootElement = document.createElement('div');
-		this.setIssueId(PropertiesHelper.readIssueId(fileOpened.data));
+
+		const contentOfFile = await this.app.vault.read(activeFile);
+
+		this.setIssueId(
+			PropertiesHelper.readProperty(contentOfFile, PropertiesHelper.PROPERTIES.issue)
+		);
+		this.setSelectedRepo(
+			PropertiesHelper.readProperty(contentOfFile, PropertiesHelper.PROPERTIES.repo)
+		);
 
 		const viewContainer = createContainer(rootElement);
 
-		if (!this.settings.repo || !this.settings.owner || !this.settings.token) {
+		if (!this.settings.token || this.settings.repos.length === 0) {
 			obContainer.empty();
 
-			createInfoSection(
+			createSection(
 				viewContainer,
 				{
 					info: 'Missing settings! 🚨',
-					description: `Please setup settings first`
+					description: { text: 'Please setup settings first' }
 				},
 				true
 			);
 
-			createInfoSection(viewContainer, {
+			createSection(viewContainer, {
 				info: 'Reload',
 				button: {
 					icon: 'refresh-ccw',
@@ -96,17 +111,41 @@ export class GithubIssueControlsView extends ItemView {
 			return;
 		}
 
-		createInfoSection(
+		createSection(
 			viewContainer,
 			{
 				info: 'Issue Editor 🦤',
-				description: 'Repo: ',
-				descriptionBold: this.settings.repo
+				description: {
+					text: 'Original: ',
+					textBold: TitleHelper.sanitize(activeFile.basename)
+				}
 			},
 			true
 		);
 
-		createInfoSection(viewContainer, {
+		createSection(viewContainer, {
+			info: 'Repo',
+			dropdown: {
+				items: [{ repo: '', code: '' }, ...this.settings.repos].map((r) => ({
+					text: r.repo,
+					value: r.code
+				})),
+				value: this.selectedRepo,
+				onChange: async (val) => {
+					this.setSelectedRepo(val);
+					const contentOfFile = await this.app.vault.read(activeFile);
+
+					await PropertiesHelper.writeProperty(
+						contentOfFile,
+						activeFile,
+						PropertiesHelper.PROPERTIES.repo,
+						val
+					);
+				}
+			}
+		});
+
+		createSection(viewContainer, {
 			info: 'Issue number:',
 			button: {
 				icon: 'crosshair',
@@ -115,7 +154,18 @@ export class GithubIssueControlsView extends ItemView {
 						new Notice('Select a issue id');
 						return;
 					}
-					return await changeIssueId(this.issueId, fileOpened, this.settings);
+
+					if (!this.selectedRepo) {
+						new Notice('Select a repo');
+						return;
+					}
+
+					return await changeIssueId(
+						this.issueId,
+						activeFile,
+						this.settings,
+						this.selectedRepo
+					);
 				}
 			},
 			input: {
@@ -125,20 +175,21 @@ export class GithubIssueControlsView extends ItemView {
 			}
 		});
 
-		createInfoSection(viewContainer, {
+		createSection(viewContainer, {
 			info: 'Fetch',
-			description: this.issueId ? this.fetchDate : 'First push',
+			description: { text: this.issueId ? this.fetchDate : 'First push' },
 			button: {
 				icon: 'refresh-ccw',
 				action: async () => {
-					if (!this.issueId || !fileOpened.file) {
+					if (!this.issueId || !this.selectedRepo) {
 						return;
 					}
 
 					const fetchedIssue = await fetchIssue(
 						this.issueId,
 						this.settings,
-						fileOpened.file
+						activeFile,
+						this.selectedRepo
 					);
 					this.setFetchDate(fetchedIssue.date);
 					this.status = fetchedIssue.status;
@@ -147,14 +198,21 @@ export class GithubIssueControlsView extends ItemView {
 			}
 		});
 
-		createInfoSection(viewContainer, {
+		createSection(viewContainer, {
 			info: 'Push',
 			description:
-				this.status === GitHubIssueStatus.CanPush ? '🟢 Changes can be pushed' : '',
+				this.status === GitHubIssueStatus.CanPush
+					? { text: '🟢 Changes can be pushed' }
+					: undefined,
 			button: {
 				icon: 'upload',
 				action: async () => {
-					await pushIssue(this.issueId, fileOpened, this.settings);
+					if (!this.selectedRepo) {
+						new Notice('Select a repo');
+						return;
+					}
+
+					await pushIssue(this.issueId, activeFile, this.settings, this.selectedRepo);
 					this.status = undefined;
 					this.reload(editor);
 				}
@@ -162,16 +220,26 @@ export class GithubIssueControlsView extends ItemView {
 		});
 
 		if (this.issueId) {
-			createInfoSection(viewContainer, {
+			createSection(viewContainer, {
 				info: 'Pull',
 				description:
 					this.status === GitHubIssueStatus.CanPull
-						? '🔴 New version available'
+						? { text: '🔴 New version available' }
 						: undefined,
 				button: {
 					icon: 'download',
 					action: async () => {
-						await pullIssue(this.issueId!, fileOpened, this.settings);
+						if (!this.selectedRepo) {
+							new Notice('Select a repo');
+							return;
+						}
+
+						await pullIssue(
+							this.issueId!,
+							activeFile,
+							this.settings,
+							this.selectedRepo
+						);
 						this.status = undefined;
 						this.reload(editor);
 					}
@@ -189,21 +257,23 @@ function createContainer(rootEl: HTMLDivElement) {
 	return c;
 }
 
-function createInfoSection(
+function createSection(
 	containerToAppend: HTMLDivElement,
 	{
 		info,
 		description,
-		descriptionBold,
 		button,
 		dropdown,
 		input
 	}: {
 		info: string;
-		description?: string;
-		descriptionBold?: string;
+		description?: { text?: string; textBold?: string; linkText?: string; linkUrl?: string };
 		button?: { icon: string; action: () => Promise<void> };
-		dropdown?: { items: { text: string; value: string }[] };
+		dropdown?: {
+			items: { text: string; value: string }[];
+			onChange: (val: string) => Promise<void>;
+			value: string | undefined;
+		};
 		input?: { type: string; value: string; onChange: (val: string) => Promise<void> };
 	},
 	headerInfo = false
@@ -219,14 +289,14 @@ function createInfoSection(
 	const infoElement = i.createDiv({ cls: 'setting-item-info' });
 	infoElement.createDiv({ cls: 'setting-item-name', text: info });
 
-	if (description) {
+	if (description?.text) {
 		const descEl = infoElement.createDiv({
 			cls: 'setting-item-description',
-			text: description
+			text: description.text
 		});
 
-		if (descriptionBold) {
-			descEl.createEl('strong', { text: descriptionBold });
+		if (description.textBold) {
+			descEl.createEl('strong', { text: description.textBold });
 		}
 	}
 
@@ -239,9 +309,8 @@ function createInfoSection(
 			const inputEl = settingControl.createEl('input', { cls: 'githobs-input' });
 			inputEl.setAttribute('type', input.type);
 			inputEl.setAttribute('value', input.value);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			inputEl.onchange = (val: any) => {
-				input.onChange(val.target.value);
+				input.onChange(val.target?.value);
 			};
 		}
 
@@ -252,6 +321,10 @@ function createInfoSection(
 				const o = select.createEl('option', { text: i.text });
 				o.setAttribute('value', i.value);
 			});
+			select.onchange = (val: any) => {
+				dropdown.onChange(val.target.value);
+			};
+			select.value = dropdown.value ?? '';
 		}
 
 		if (button) {

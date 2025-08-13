@@ -1,3 +1,8 @@
 .githobs-input {
 	width: 3.5rem;
 }
+
+.githobs-delete-repo-btn {
+	margin-bottom: 10px;
+	margin-left: auto;
+}
