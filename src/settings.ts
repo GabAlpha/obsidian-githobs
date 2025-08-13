@@ -2,6 +2,7 @@ import GitHobs from 'main';
 import { App, PluginSettingTab, Setting } from 'obsidian';
 
 export type Repo = {
+	code: string;
 	owner: string;
 	repo: string;
 };
@@ -93,7 +94,7 @@ export class SettingTab extends PluginSettingTab {
 		const addRepoBtn = div2.createEl('button', { text: 'Add repo', cls: 'mod-cta' });
 
 		addRepoBtn.onclick = async () => {
-			settingsValues.repos = [...settingsValues.repos, { owner: '', repo: '' }];
+			settingsValues.repos = [...settingsValues.repos, { owner: '', repo: '', code: '' }];
 			await plugin.saveSettings();
 			// reload
 			this.display();
@@ -103,13 +104,18 @@ export class SettingTab extends PluginSettingTab {
 			createFormSetting(plugin, containerEl, {
 				name: 'Owner repo',
 				value: repo.owner,
-				onChange: (val) => (plugin.settings.repos[idx].owner = val)
+				onChange: (val) => {
+					plugin.settings.repos[idx].owner = val;
+				}
 			});
 
 			createFormSetting(plugin, containerEl, {
 				name: 'Repo name',
 				value: repo.repo,
-				onChange: (val) => (plugin.settings.repos[idx].repo = val)
+				onChange: (val) => {
+					plugin.settings.repos[idx].repo = val;
+					plugin.settings.repos[idx].code = `${plugin.settings.repos[idx].owner}|${val}`;
+				}
 			});
 
 			const removeRepoBtn = containerEl.createEl('button', { text: 'canc' });

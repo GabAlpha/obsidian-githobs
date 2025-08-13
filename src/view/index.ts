@@ -16,6 +16,7 @@ export class GithubIssueControlsView extends ItemView {
 	fetchDate: string | undefined;
 	status: GitHubIssueStatus | undefined;
 	issueId: string | undefined;
+	selectedRepo: string | undefined;
 
 	constructor(leaf: WorkspaceLeaf, settings: GitHobsSettings) {
 		super(leaf);
@@ -39,6 +40,7 @@ export class GithubIssueControlsView extends ItemView {
 		this.fetchDate = undefined;
 		this.status = undefined;
 		this.issueId = undefined;
+		this.selectedRepo = undefined;
 		this.draw();
 	}
 
@@ -48,6 +50,10 @@ export class GithubIssueControlsView extends ItemView {
 
 	public setIssueId(issueId: string | undefined) {
 		this.issueId = issueId;
+	}
+
+	public setSelectedRepo(selectedRepo: string | undefined) {
+		this.selectedRepo = selectedRepo;
 	}
 
 	public reload(editor: MarkdownView | null) {
@@ -119,8 +125,11 @@ export class GithubIssueControlsView extends ItemView {
 			dropdown: {
 				items: this.settings.repos.map((r) => ({
 					text: r.repo,
-					value: `${r.owner}|${r.repo}`
-				}))
+					value: r.code
+				})),
+				onChange: async (val) => {
+					this.setSelectedRepo(val);
+				}
 			}
 		});
 
@@ -133,7 +142,18 @@ export class GithubIssueControlsView extends ItemView {
 						new Notice('Select a issue id');
 						return;
 					}
-					return await changeIssueId(this.issueId, fileOpened, this.settings);
+
+					if (!this.selectedRepo) {
+						new Notice('Select a repo');
+						return;
+					}
+
+					return await changeIssueId(
+						this.issueId,
+						fileOpened,
+						this.settings,
+						this.selectedRepo
+					);
 				}
 			},
 			input: {
@@ -149,14 +169,15 @@ export class GithubIssueControlsView extends ItemView {
 			button: {
 				icon: 'refresh-ccw',
 				action: async () => {
-					if (!this.issueId || !fileOpened.file) {
+					if (!this.issueId || !fileOpened.file || !this.selectedRepo) {
 						return;
 					}
 
 					const fetchedIssue = await fetchIssue(
 						this.issueId,
 						this.settings,
-						fileOpened.file
+						fileOpened.file,
+						this.selectedRepo
 					);
 					this.setFetchDate(fetchedIssue.date);
 					this.status = fetchedIssue.status;
@@ -174,7 +195,12 @@ export class GithubIssueControlsView extends ItemView {
 			button: {
 				icon: 'upload',
 				action: async () => {
-					await pushIssue(this.issueId, fileOpened, this.settings);
+					if (!this.selectedRepo) {
+						new Notice('Select a repo');
+						return;
+					}
+
+					await pushIssue(this.issueId, fileOpened, this.settings, this.selectedRepo);
 					this.status = undefined;
 					this.reload(editor);
 				}
@@ -191,7 +217,17 @@ export class GithubIssueControlsView extends ItemView {
 				button: {
 					icon: 'download',
 					action: async () => {
-						await pullIssue(this.issueId!, fileOpened, this.settings);
+						if (!this.selectedRepo) {
+							new Notice('Select a repo');
+							return;
+						}
+
+						await pullIssue(
+							this.issueId!,
+							fileOpened,
+							this.settings,
+							this.selectedRepo
+						);
 						this.status = undefined;
 						this.reload(editor);
 					}
@@ -221,7 +257,10 @@ function createSection(
 		info: string;
 		description?: { text?: string; textBold?: string; linkText?: string; linkUrl?: string };
 		button?: { icon: string; action: () => Promise<void> };
-		dropdown?: { items: { text: string; value: string }[] };
+		dropdown?: {
+			items: { text: string; value: string }[];
+			onChange: (val: string) => Promise<void>;
+		};
 		input?: { type: string; value: string; onChange: (val: string) => Promise<void> };
 	},
 	headerInfo = false
