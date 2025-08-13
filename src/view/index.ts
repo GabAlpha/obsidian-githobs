@@ -55,20 +55,28 @@ export class GithubIssueControlsView extends ItemView {
 		this.draw();
 	}
 
-	private readonly draw = (): void => {
+	private readonly draw = async () => {
 		const obContainer = this.containerEl.children[1];
-		const fileOpened = this.leaf.view.app.workspace.activeEditor as MarkdownFile | null;
+		const activeFile = this.app.workspace.getActiveFile();
 		const editor = this.leaf.view.app.workspace.getActiveViewOfType(MarkdownView);
+
+		if (!activeFile) {
+			obContainer.empty();
+			return;
+		}
+
+		const fileOpened = {
+			data: await this.app.vault.read(activeFile),
+			file: activeFile
+		} as MarkdownFile;
 
 		if (!fileOpened) {
 			obContainer.empty();
 			return;
 		}
 
-		console.log(fileOpened.data, editor);
-
 		const rootElement = document.createElement('div');
-		this.setIssueId(PropertiesHelper.readIssueId(fileOpened.data));
+		this.setIssueId(PropertiesHelper.readIssueId(fileOpened?.data));
 
 		const viewContainer = createContainer(rootElement);
 
