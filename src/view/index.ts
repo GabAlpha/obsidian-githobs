@@ -111,14 +111,25 @@ export class GithubIssueControlsView extends ItemView {
 			return;
 		}
 
+		const issueUrl = (() => {
+			const repo = this.settings.repos.find((r) => r.code === this.selectedRepo);
+			if (!repo || !this.issueId) {
+				return;
+			}
+			return `https://github.com/${repo?.owner}/${repo?.repo}/issues/${this.issueId}`;
+		})();
+
 		createSection(
 			viewContainer,
 			{
 				info: 'Issue Editor 🦤',
-				description: {
-					text: 'Original: ',
-					textBold: TitleHelper.sanitize(activeFile.basename)
-				}
+				...(issueUrl && {
+					description: {
+						text: 'Original: ',
+						linkText: TitleHelper.sanitize(activeFile.basename),
+						linkUrl: issueUrl
+					}
+				})
 			},
 			true
 		);
@@ -297,6 +308,10 @@ function createSection(
 
 		if (description.textBold) {
 			descEl.createEl('strong', { text: description.textBold });
+		}
+
+		if (description.linkText && description.linkUrl) {
+			descEl.createEl('a', { text: description.linkText, href: description.linkUrl });
 		}
 	}
 
