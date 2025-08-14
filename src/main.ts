@@ -1,6 +1,7 @@
+import { GenericSettings, migrate } from 'helper/migrations';
 import { Plugin } from 'obsidian';
 
-import { DEFAULT_SETTINGS, GitHobsSettings, SettingTab } from 'settings';
+import { GitHobsSettings, SettingTab } from 'settings';
 import { GithubIssueControlsView, GithubIssueControlsViewType } from 'view';
 
 export default class GitHobs extends Plugin {
@@ -47,7 +48,13 @@ export default class GitHobs extends Plugin {
 	onunload() {}
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		const originalSettings: GenericSettings = await this.loadData();
+		const settings = migrate(originalSettings);
+		this.settings = settings;
+
+		// Debug only
+		// Merge originalSettings with DEFAULT_SETTINGS
+		// this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
 	}
 
 	async saveSettings() {

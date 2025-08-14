@@ -8,11 +8,13 @@ export type Repo = {
 };
 
 export interface GitHobsSettings {
+	version: number;
 	token: string;
 	repos: Repo[];
 }
 
 export const DEFAULT_SETTINGS: GitHobsSettings = {
+	version: 1,
 	token: '',
 	repos: []
 };
