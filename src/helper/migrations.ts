@@ -5,8 +5,15 @@ export type GenericSettings = Record<string, unknown> & { version: number };
 
 const MIGRATIONS: Array<(settings: GenericSettings) => GenericSettings> = [supportMultipleRepos];
 
-export function migrate(settings: GenericSettings): GitHobsSettings {
+export function migrate(settings: GenericSettings): {
+	newSettings: GitHobsSettings;
+	migrationsApplied: boolean;
+} {
 	const migrationsToApply = MIGRATIONS.splice(settings.version ?? 0);
+
+	if (migrationsToApply.length === 0) {
+		return { newSettings: settings as unknown as GitHobsSettings, migrationsApplied: false };
+	}
 
 	let newSettings = settings;
 
@@ -15,5 +22,5 @@ export function migrate(settings: GenericSettings): GitHobsSettings {
 		newSettings = migration(newSettings);
 	}
 
-	return newSettings as unknown as GitHobsSettings;
+	return { newSettings: newSettings as unknown as GitHobsSettings, migrationsApplied: true };
 }
