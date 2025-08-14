@@ -50,6 +50,9 @@ export default class GitHobs extends Plugin {
 	async loadSettings() {
 		const originalSettings: GenericSettings = await this.loadData();
 		const settings = migrate(originalSettings);
+
+		// Save settings on first time
+		await this.saveData(settings);
 		this.settings = settings;
 
 		// Debug only
